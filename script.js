@@ -3,7 +3,9 @@ const form = document.getElementById('dev-form');
 
 const result = document.getElementById('result');
 
-let reservations = []
+let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+
+renderReservations();
 
 // SUBMIT
 form.addEventListener('submit', function (e) {
@@ -27,6 +29,8 @@ form.addEventListener('submit', function (e) {
     };
 
     reservations.push(reservation);
+
+    localStorage.setItem("reservations", JSON.stringify(reservations));
 
     renderReservations();
 
@@ -59,6 +63,8 @@ function renderReservations() {
                 return r.id !== reservation.id;
             });
 
+            localStorage.setItem("reservations", JSON.stringify(reservations));
+
             renderReservations();
         });
 
@@ -87,6 +93,8 @@ function renderReservations() {
 
                 reservation.name = nameInput.value;
                 reservation.date = dateInput.value;
+
+                localStorage.setItem("reservations", JSON.stringify(reservations));
 
                 renderReservations(); 
 
