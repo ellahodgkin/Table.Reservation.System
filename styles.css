@@ -19,7 +19,7 @@ body {
 
 }
 
-#name, #date {
+.data-input-initial {
     font-size: 15px;
     padding: 8px 10px;
     border: 2px solid #ccc;
@@ -29,7 +29,7 @@ body {
 
 }
 
-#name:focus, #date:focus {
+.data-input-initial:focus {
     border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76,175,80,0.4);
 }
@@ -101,7 +101,7 @@ body {
 }
 
 
-.dateInput, .nameInput {
+.data-input-edit {
     padding: 6px 8px;
     font-size: 12px;
     border: 2px solid #ccc;
@@ -110,7 +110,7 @@ body {
     margin: 4px;
 }
 
-.dateInput:focus, .nameInput:focus {
+.data-input-edit:focus {
     border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76,175,80,0.4);
 }
