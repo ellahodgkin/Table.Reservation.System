@@ -13,13 +13,19 @@
         <form id="dev-form">
 
             <label for="name"> Name: </label>
-            <input id="name" name="name" type="text"> <br />
+            <input id="name" class="data-input-initial" name="name" type="text"> <br />
 
 
             <label for="date"> Date: </label>
-            <input id="date" type="datetime-local"> <br />
+            <input id="date" class="data-input-initial" type="date"> <br />
 
-            <input id="submit" type="submit" value="Submit"> 
+            <label for="time"> Time: </label>
+            <select id="time" class="data-input-initial" ></select> <br />
+
+            <label for="guests"> Guests: </label>
+            <select id="guests" class="data-input-initial" ></select> <br />
+
+            <input id="submit" class="data-input-initial" type="submit" value="Submit"> 
         </form>
     </div>
 
