@@ -37,9 +37,10 @@ body {
 #submit {
     font-size: 15px;
     padding: 5px 10px;
+    margin: 10px;
     background-color: white;
     border-radius: 8px; 
-
+    cursor: pointer;
 }
 
 #submit:hover {
@@ -114,3 +115,4 @@ body {
     border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76,175,80,0.4);
 }
+
