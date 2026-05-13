@@ -1,0 +1,24 @@
+{
+  "name": "table.reservation.system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ellahodgkin/Table.Reservation.System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ellahodgkin/Table.Reservation.System/issues"
+  },
+  "homepage": "https://github.com/ellahodgkin/Table.Reservation.System#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
