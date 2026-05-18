@@ -1,9 +1,14 @@
 // creates an express application
 
 const express = require("express");
+const cors = require('cors');
 const app = express();
 
+app.use(cors());
+
 app.use(express.json()); // This is important! It allows us to parse JSON request bodies.
+
+let reservations = [];
 
 // GET (output)
 app.get("/", (req, res) => res.send("Hello, world!"));

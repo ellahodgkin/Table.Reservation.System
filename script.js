@@ -3,9 +3,17 @@ const form = document.getElementById('dev-form');
 
 const result = document.getElementById('result');
 
-let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+// let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
 
-renderReservations();
+let reservations = [];
+
+fetch("http://localhost:3000/reservations")
+.then(response => response.json())
+.then(data => {
+    reservations = data;
+    renderReservations();
+
+});
 
 // GENERATE TIME SLOTS
 
@@ -54,7 +62,7 @@ function generateGuestoptions(selectElement) {
 generateGuestoptions(guestsSelect);
 
 // SUBMIT
-form.addEventListener('submit', function (e) {
+form.addEventListener('submit', async function (e) {
     console.log('button clicked');
 
     e.preventDefault();
@@ -80,10 +88,15 @@ form.addEventListener('submit', function (e) {
         guests: guests
     };
 
-    reservations.push(reservation);
+    const response = await fetch("http://localhost:3000/reservations", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(reservation)
 
-    localStorage.setItem("reservations", JSON.stringify(reservations));
+    });
 
+    const updatedReservations = await response.json();
+    reservations = updatedReservations;
     renderReservations();
 
     result.textContent = `Hello ${name}, your booking for ${guests} is confirmed for: ${date} at ${time}!`;
@@ -108,16 +121,18 @@ function renderReservations() {
         edit.textContent = 'Edit';
 
         // DELETE
-        remove.addEventListener('click', function() {
+        remove.addEventListener('click', async function() {
             console.log('delete clicked');
 
-            reservations = reservations.filter(function(r) {
-                return r.id !== reservation.id;
+            const response = await fetch(`http://localhost:3000/reservations/${reservation.id}`, {
+                method: "DELETE",
+                headers: {"Content-Type": "application/json"},
             });
-
-            localStorage.setItem("reservations", JSON.stringify(reservations));
+            const updatedReservations = await response.json();
+            reservations = updatedReservations;
 
             renderReservations();
+
         });
 
         // EDIT
@@ -150,7 +165,7 @@ function renderReservations() {
             item.appendChild(Save);
 
             // SAVE
-            Save.addEventListener('click', function() {
+            Save.addEventListener('click', async function() {
                 if(!nameInput.value || !dateInput.value || !timeInput.value || !guestsInput.value) return;
 
                 reservation.name = nameInput.value;
@@ -158,9 +173,16 @@ function renderReservations() {
                 reservation.time = timeInput.value;
                 reservation.guests = guestsInput.value;
 
-                localStorage.setItem("reservations", JSON.stringify(reservations));
+                const response = await fetch(`http://localhost:3000/reservations/${reservation.id}`, {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(reservation)
+                });
 
-                renderReservations(); 
+                const updatedReservations = await response.json();
+                reservations = updatedReservations;
+
+                renderReservations();
 
                 result.textContent = `Hello ${reservation.name}, your booking for ${reservation.guests} has been updated to: ${reservation.date} at ${reservation.time}!`;
 
