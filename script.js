@@ -102,9 +102,11 @@ form.addEventListener('submit', async function (e) {
 
 
 // HOW IT LOOKS - container
+// HOW IT LOOKS - container
 function renderReservations() {
     const container = document.getElementById('reservations-list');
 
+    clearReservations(container);
     clearReservations(container);
 
     reservations.forEach(function(reservation) {
@@ -177,6 +179,8 @@ function createDeleteButton(reservation) {
 
         renderReservations();
     });
+        renderReservations();
+    });
 
     return deleteButton;
 
@@ -207,7 +211,14 @@ function createEditForm(reservation, item) {
     const nameInput = document.createElement('input');
     nameInput.classList.add("name-input", "data-input-edit");
     nameInput.value = reservation.name;
+    const nameInput = document.createElement('input');
+    nameInput.classList.add("name-input", "data-input-edit");
+    nameInput.value = reservation.name;
 
+    const dateInput = document.createElement('input');
+    dateInput.type = "date";
+    dateInput.classList.add("date-input", "data-input-edit");
+    dateInput.value = reservation.date;
     const dateInput = document.createElement('input');
     dateInput.type = "date";
     dateInput.classList.add("date-input", "data-input-edit");
@@ -217,7 +228,15 @@ function createEditForm(reservation, item) {
     generateTimeSlots(timeInput);
     timeInput.classList.add("time-input", "data-input-edit");
     timeInput.value = reservation.time;
+    const timeInput = document.createElement('select');
+    generateTimeSlots(timeInput);
+    timeInput.classList.add("time-input", "data-input-edit");
+    timeInput.value = reservation.time;
 
+    const guestsInput = document.createElement('select');
+    generateGuestoptions(guestsInput);
+    guestsInput.classList.add("guests-input", "data-input-edit");
+    guestsInput.value = reservation.guests;
     const guestsInput = document.createElement('select');
     generateGuestoptions(guestsInput);
     guestsInput.classList.add("guests-input", "data-input-edit");
@@ -226,9 +245,14 @@ function createEditForm(reservation, item) {
     const saveButton = document.createElement('button');
     saveButton.classList.add("save-btn", "edit-btns")
     saveButton.textContent = "Save";
+    const saveButton = document.createElement('button');
+    saveButton.classList.add("save-btn", "edit-btns")
+    saveButton.textContent = "Save";
 
     item.innerHTML = "";
+    item.innerHTML = "";
 
+    item.append(nameInput, dateInput, timeInput, guestsInput, saveButton);
     item.append(nameInput, dateInput, timeInput, guestsInput, saveButton);
 
     saveButton.addEventListener("click", () => {
@@ -243,6 +267,10 @@ async function updateReservation(reservation, nameInput, dateInput, timeInput, g
 
     if (!nameInput.value || !dateInput.value) return;
 
+    reservation.name = nameInput.value;
+    reservation.date = dateInput.value;
+    reservation.time = timeInput.value;
+    reservation.guests = guestsInput.value;
     reservation.name = nameInput.value;
     reservation.date = dateInput.value;
     reservation.time = timeInput.value;
