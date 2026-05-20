@@ -3,8 +3,6 @@ const form = document.getElementById('dev-form');
 
 const result = document.getElementById('result');
 
-// let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
-
 let reservations = [];
 
 fetch("http://localhost:3000/reservations")
@@ -68,11 +66,8 @@ form.addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const name = document.getElementById('name').value.trim();
-
     const date = document.getElementById('date').value;
-
     const time = document.getElementById('time').value;
-
     const guests = document.getElementById('guests').value;
 
     if (!name || !date || !time || !guests) {
@@ -106,122 +101,166 @@ form.addEventListener('submit', async function (e) {
 });
 
 
-// RENDER
+// HOW IT LOOKS - container
 function renderReservations() {
     const container = document.getElementById('reservations-list');
 
-    container.innerHTML = ""; //clear old list
+    clearReservations(container);
 
     reservations.forEach(function(reservation) {
 
-        const item = document.createElement('div');
-        const remove = document.createElement('button');
-        const edit = document.createElement('button');
+        const item = createReservationItem(reservation);
 
-        // RESERVATION LIST
-        const formattedDate = new Date(reservation.date);
-        const dateString = formattedDate.toLocaleDateString("en-GB");
-        item.textContent = `${reservation.name} - ${dateString} - ${reservation.time} - ${reservation.guests}`;
-        remove.textContent = 'Delete';
-        edit.textContent = 'Edit';
-
-        // DELETE
-        remove.addEventListener('click', async function() {
-            console.log('delete clicked');
-
-            const response = await fetch(`http://localhost:3000/reservations/${reservation.id}`, {
-                method: "DELETE",
-                headers: {"Content-Type": "application/json"},
-            });
-            const updatedReservations = await response.json();
-            reservations = updatedReservations;
-
-            renderReservations();
-
-        });
-
-        // EDIT
-        edit.addEventListener('click', function() {
-            console.log("edit clicked");
-
-            const nameInput = document.createElement('input');
-            nameInput.value = reservation.name;
-
-            const dateInput = document.createElement('input');
-            dateInput.type = "date";
-            dateInput.value = reservation.date;
-
-            const timeInput = document.createElement('select');
-            generateTimeSlots(timeInput);
-            timeInput.value = reservation.time;
-
-            const guestsInput = document.createElement('select');
-            generateGuestoptions(guestsInput);
-            guestsInput.value = reservation.guests;
-
-            const Save = document.createElement('button');
-            Save.textContent = "Save";
-
-            item.innerHTML = "";
-
-            item.appendChild(nameInput);
-            item.appendChild(dateInput);
-            item.appendChild(timeInput);
-            item.appendChild(guestsInput);
-            item.appendChild(Save);
-
-            // SAVE
-            Save.addEventListener('click', async function() {
-                if(!nameInput.value || !dateInput.value || !timeInput.value || !guestsInput.value) return;
-
-                reservation.name = nameInput.value;
-                reservation.date = dateInput.value;
-                reservation.time = timeInput.value;
-                reservation.guests = guestsInput.value;
-
-                const response = await fetch(`http://localhost:3000/reservations/${reservation.id}`, {
-                    method: "PUT",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify(reservation)
-                });
-
-                const updatedReservations = await response.json();
-                reservations = updatedReservations;
-
-                renderReservations();
-
-                const formattedDate = new Date(reservation.date);
-                const dateString = formattedDate.toLocaleDateString("en-GB");
-
-                result.textContent = `Hello ${reservation.name}, your booking for ${reservation.guests} has been updated to: ${dateString} at ${reservation.time}!`;
-
-            });
-
-            Save.classList.add("save-btn");
-            Save.classList.add("edit-buttons")
-            dateInput.classList.add("dateInput");
-            nameInput.classList.add("nameInput");
-            timeInput.classList.add("timeInput");
-            guestsInput.classList.add("guestsInput");
-
-            nameInput.classList.add("data-input-edit");
-            dateInput.classList.add("data-input-edit");
-            timeInput.classList.add("data-input-edit");
-            guestsInput.classList.add("data-input-edit");
-
-        });
-        
-        item.appendChild(edit); //place it on the screen
-        item.appendChild(remove);
         container.appendChild(item);
-
-        edit.classList.add("edit-btn");
-        remove.classList.add("delete-btn");
-        edit.classList.add("edit-buttons")
-        remove.classList.add("edit-buttons")
+    })
+};
 
 
 
-        // repeat for each reservation
+// CLEAR
+function clearReservations(container) {
+    container.innerHTML = "";
+};
+
+
+
+
+//CREATE RESERVATION - item with text, edit, delete
+function createReservationItem(reservation) {
+    const item = document.createElement('div');
+    const text = document.createElement('span');
+
+    text.textContent = formatReservation(reservation);
+
+    const editButton = createEditButton(reservation, item);
+    const deleteButton = createDeleteButton(reservation);
+
+    item.appendChild(text);
+    item.appendChild(editButton);
+    item.appendChild(deleteButton);
+
+    return item;
+
+};
+
+
+
+// FORMAT RESERVATIONS
+function formatReservation(reservation) {
+
+    const formattedDate = new Date(reservation.date);
+
+    const dateString = formattedDate.toLocaleDateString("en-GB");
+
+    return `${reservation.name} | ${dateString} | ${reservation.time} | ${reservation.guests} guests`;
+};
+
+
+
+
+// DELETE BUTTON 
+function createDeleteButton(reservation) {
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = "Delete";
+    deleteButton.classList.add("delete-btn", "edit-btns");
+
+
+    deleteButton.addEventListener('click', async function() {
+        console.log('delete clicked');
+        const response = await fetch(`http://localhost:3000/reservations/${reservation.id}`, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"},
+        });
+        const updatedReservations = await response.json();
+        reservations = updatedReservations;
+
+        renderReservations();
     });
+
+    return deleteButton;
+
+};
+
+
+// MAKE EDIT BUTTON
+function createEditButton(reservation, item) {
+
+    const editButton = document.createElement('button');
+    editButton.textContent = "Edit";
+    editButton.classList.add("edit-btn", "edit-btns");
+
+    editButton.addEventListener("click", function() {
+        createEditForm(reservation, item);
+    });
+
+    return editButton;
+};
+
+
+
+
+// EDIT BUTTON FORM
+function createEditForm(reservation, item) {
+    console.log("edit clicked");
+
+    const nameInput = document.createElement('input');
+    nameInput.classList.add("name-input", "data-input-edit");
+    nameInput.value = reservation.name;
+
+    const dateInput = document.createElement('input');
+    dateInput.type = "date";
+    dateInput.classList.add("date-input", "data-input-edit");
+    dateInput.value = reservation.date;
+
+    const timeInput = document.createElement('select');
+    generateTimeSlots(timeInput);
+    timeInput.classList.add("time-input", "data-input-edit");
+    timeInput.value = reservation.time;
+
+    const guestsInput = document.createElement('select');
+    generateGuestoptions(guestsInput);
+    guestsInput.classList.add("guests-input", "data-input-edit");
+    guestsInput.value = reservation.guests;
+
+    const saveButton = document.createElement('button');
+    saveButton.classList.add("save-btn", "edit-btns")
+    saveButton.textContent = "Save";
+
+    item.innerHTML = "";
+
+    item.append(nameInput, dateInput, timeInput, guestsInput, saveButton);
+
+    saveButton.addEventListener("click", () => {
+        updateReservation(reservation, nameInput, dateInput, timeInput, guestsInput);
+    });
+
+};
+
+
+// UPDATE RESERVATION WITH INPUTS
+async function updateReservation(reservation, nameInput, dateInput, timeInput, guestsInput) {
+
+    if (!nameInput.value || !dateInput.value) return;
+
+    reservation.name = nameInput.value;
+    reservation.date = dateInput.value;
+    reservation.time = timeInput.value;
+    reservation.guests = guestsInput.value;
+
+    const response = await fetch(`http://localhost:3000/reservations/${reservation.id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(reservation)
+    });
+
+    const updatedReservations = await response.json();
+    reservations = updatedReservations;
+
+    renderReservations();
+
+    const formattedDate = new Date(reservation.date);
+    const dateString = formattedDate.toLocaleDateString("en-GB");
+
+    result.textContent = `Hello ${reservation.name}, your booking for ${reservation.guests} has been updated to: ${dateString} at ${reservation.time}!`;
 };
