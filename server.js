@@ -36,7 +36,12 @@ app.post("/reservations", async (req, res) => {
         "INSERT INTO reservations (name, date, time, guests) VALUES ($1, $2, $3, $4) RETURNING *", 
         [name, date, time, guests]
     );
-    res.json(result.rows); 
+
+    const newResult = await pool.query(
+        "SELECT * FROM reservations"
+    );
+    
+    res.json(newResult.rows); 
 });
  
 // DELETE (delete)
@@ -47,7 +52,12 @@ app.delete("/reservations/:id", async (req, res) => {
         "DELETE FROM reservations WHERE id = $1 RETURNING *", 
         [selectedId]
     );
-    res.json(result.rows);    
+
+    const newResult = await pool.query(
+        "SELECT * FROM reservations"
+    );
+
+    res.json(newResult.rows);    
 });
 
 // PUT (edit)
@@ -60,7 +70,12 @@ app.put("/reservations/:id", async (req, res) => {
         // set: list the columns to update and what to change the to
         [name, date, time, guests, selectedId]
     );
-    res.json(result.rows);
+    
+    const newResult = await pool.query(
+        "SELECT * FROM reservations"
+    );
+    
+    res.json(newResult.rows); 
 });
 
 

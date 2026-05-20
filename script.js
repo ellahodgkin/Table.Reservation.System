@@ -92,14 +92,17 @@ form.addEventListener('submit', async function (e) {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(reservation)
-
     });
 
     const updatedReservations = await response.json();
     reservations = updatedReservations;
+    console.log(`reservations: ${reservations}`)
     renderReservations();
 
-    result.textContent = `Hello ${name}, your booking for ${guests} is confirmed for: ${date} at ${time}!`;
+    const formattedDate = new Date(date);
+    const dateString = formattedDate.toLocaleDateString("en-GB");
+
+    result.textContent = `Hello ${name}, your booking for ${guests} is confirmed for: ${dateString} at ${time}!`;
 });
 
 
@@ -116,7 +119,9 @@ function renderReservations() {
         const edit = document.createElement('button');
 
         // RESERVATION LIST
-        item.textContent = `${reservation.name} - ${reservation.date} - ${reservation.time} - ${reservation.guests}`;
+        const formattedDate = new Date(reservation.date);
+        const dateString = formattedDate.toLocaleDateString("en-GB");
+        item.textContent = `${reservation.name} - ${dateString} - ${reservation.time} - ${reservation.guests}`;
         remove.textContent = 'Delete';
         edit.textContent = 'Edit';
 
@@ -143,6 +148,7 @@ function renderReservations() {
             nameInput.value = reservation.name;
 
             const dateInput = document.createElement('input');
+            dateInput.type = "date";
             dateInput.value = reservation.date;
 
             const timeInput = document.createElement('select');
@@ -184,7 +190,10 @@ function renderReservations() {
 
                 renderReservations();
 
-                result.textContent = `Hello ${reservation.name}, your booking for ${reservation.guests} has been updated to: ${reservation.date} at ${reservation.time}!`;
+                const formattedDate = new Date(reservation.date);
+                const dateString = formattedDate.toLocaleDateString("en-GB");
+
+                result.textContent = `Hello ${reservation.name}, your booking for ${reservation.guests} has been updated to: ${dateString} at ${reservation.time}!`;
 
             });
 
