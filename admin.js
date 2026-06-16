@@ -1,9 +1,11 @@
-
 const form = document.getElementById('dev-form');
 
 const result = document.getElementById('result');
 
 let reservations = [];
+
+const timeSelect = document.getElementById("time");
+const guestsSelect = document.getElementById("guests");
 
 fetch("http://localhost:3000/reservations")
 .then(response => {
@@ -21,51 +23,6 @@ fetch("http://localhost:3000/reservations")
     console.log(error);
     result.textContent = "Sorry, something went wrong. Please try again."
 })
-
-
-// GENERATE TIME SLOTS
-
-const timeSelect = document.getElementById("time");
-
-function generateTimeSlots(selectElement) {
-
-    const openHour = 12;
-    const closeHour = 19;
-
-    for( let hour=openHour; hour <= closeHour; hour++) {
-        for( let minute of [0, 15, 30, 45]) {
-            if( hour === closeHour && minute > 0) break;
-
-            const option = document.createElement("option");
-
-            const h = String(hour).padStart(2, "0");
-            const m = String(minute).padStart(2, "0");
-
-            option.value = `${h}:${m}`;
-            option.textContent = `${h}:${m}`;
-
-            selectElement.appendChild(option);
-        };
-    };
-};
-
-
-
-// GENERATE GUEST SELECT
-const guestsSelect = document.getElementById("guests");
-
-function generateGuestoptions(selectElement) {
-
-    for( let i=1; i <= 8; i++) {
-
-        const option = document.createElement("option");
-
-        option.value = i;
-        option.textContent = i;
-
-        selectElement.appendChild(option);
-    };
-};
 
 generateTimeSlots(timeSelect);
 generateGuestoptions(guestsSelect);
