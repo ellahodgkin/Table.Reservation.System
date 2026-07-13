@@ -6,7 +6,7 @@ function generateTimeSlots(selectElement) {
     const closeHour = 19;
 
     for( let hour=openHour; hour <= closeHour; hour++) {
-        for( let minute of [0, 15, 30, 45]) {
+        for( let minute of [0, 30]) {
             if( hour === closeHour && minute > 0) break;
 
             const option = document.createElement("option");

@@ -57,12 +57,13 @@ form.addEventListener('submit', async function (e) {
             body: JSON.stringify(reservation)
         });
 
+        const data = await response.json(); // read body regardless of status
+
         if (!response.ok) {
-            throw new Error("Server Error")
+            throw new Error(data.error || "Server Error");
         }
 
-        const updatedReservations = await response.json();
-        reservations = updatedReservations;
+        reservations = data; // on success data IS the updated reservations list
         console.log(`reservations: ${reservations}`)
 
         const formattedDate = new Date(date);
@@ -73,6 +74,7 @@ form.addEventListener('submit', async function (e) {
         result.textContent = `Hello ${name}, your booking for ${guests} is confirmed for: ${dateString} at ${timeString}!`;
     } catch (error) {
         console.log(error);
-        result.textContent = "Sorry, something went wrong. Please try again.";
+        result.textContent = error.message;
+        // will now contain either "no time slots available" or "server error" depending on what happened
     }
 });
