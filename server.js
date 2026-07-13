@@ -19,7 +19,7 @@ app.get("/", (req, res) => res.send("Hello, world!"));
 
 app.get("/reservations", async (req, res) => {
     const result = await pool.query(
-        "SELECT * FROM reservations"
+        "SELECT reservations.*, restaurant_tables.seat_capacity FROM reservations JOIN restaurant_tables ON reservations.table_id = restaurant_tables.id"
     );
     res.json(result.rows);
 });
@@ -31,14 +31,58 @@ app.post("/reservations", async (req, res) => {
     let name = req.body.name;
     let date = req.body.date;
     let time = req.body.time;
-    let guests = req.body.guests;
+    let guests = Number(req.body.guests);
+
+    const bookedResult = await pool.query(
+        "SELECT table_id FROM reservations WHERE date = $1 AND time = $2", [date, time]
+    );
+    // find which tables are already booked
+    // give me the table_id of every reservation that matches this date and time
+
+    const bookedTableIds = bookedResult.rows.map(row => row.table_id);
+    // row object {table_id: 3} gets reduced to just [3]
+    // [{table_id: 3}, {table_id: 7}] gets reduce to [3, 7]
+
+    const tablesResult = await pool.query(
+        "SELECT * FROM restaurant_tables ORDER BY seat_capacity ASC"
+    );
+    // fetches every row from restaurant_tables, sorted smallest capacity first
+    // means we find the smallest capacity first, not wastefully picking bigger tables
+
+    const allTables = tablesResult.rows; 
+    // array of table objects, each like {id: 7, seat_capacity: 2}
+
+    // ALLOCATION LOGIC
+
+    const suitableTable = allTables.find(table => {
+        // .find() loops through allTables one by one and returns the first one where function inside returns true
+        // when it finds a match it stops looking 
+        // for each "table" being checked: 
+        const isFree = !bookedTableIds.includes(table.id);
+        // .includes() checks if table.id exists in that array
+        // ! flips it, isFree is true only if table's id is not in that booked list
+        const sizeFits = guests <= table.seat_capacity;
+        // true if the group size is small enough to fit at this table
+        return isFree && sizeFits;
+    });
+
+
+    if(!suitableTable) {
+        return res.status(409).json({error: "No tables available for this time slot."});
+    };
+    // if .find() didn't find anything matching, suitableTable is undefined (falsy)
+    // so !suitableTable is true
+    // in that case, we get 409 HTTP status
+    // 409 means "conflict", can't be completed due to conflicting state, here meaning "fully booked"
+    // return stops function from continuing
+
     const result = await pool.query(
-        "INSERT INTO reservations (name, date, time, guests) VALUES ($1, $2, $3, $4) RETURNING *", 
-        [name, date, time, guests]
+        "INSERT INTO reservations (name, date, time, guests, table_id) VALUES ($1, $2, $3, $4, $5) RETURNING *", 
+        [name, date, time, guests, suitableTable.id]
     );
 
     const newResult = await pool.query(
-        "SELECT * FROM reservations"
+        "SELECT reservations.*, restaurant_tables.seat_capacity FROM reservations JOIN restaurant_tables ON reservations.table_id = restaurant_tables.id"
     );
     
     res.json(newResult.rows); 
@@ -54,7 +98,7 @@ app.delete("/reservations/:id", async (req, res) => {
     );
 
     const newResult = await pool.query(
-        "SELECT * FROM reservations"
+        "SELECT reservations.*, restaurant_tables.seat_capacity FROM reservations JOIN restaurant_tables ON reservations.table_id = restaurant_tables.id"
     );
 
     res.json(newResult.rows);    
@@ -72,7 +116,7 @@ app.put("/reservations/:id", async (req, res) => {
     );
     
     const newResult = await pool.query(
-        "SELECT * FROM reservations"
+        "SELECT reservations.*, restaurant_tables.seat_capacity FROM reservations JOIN restaurant_tables ON reservations.table_id = restaurant_tables.id"
     );
     
     res.json(newResult.rows); 
