@@ -204,7 +204,7 @@ function createEditForm(reservation, item) {
     const timeInput = document.createElement('select');
     generateTimeSlots(timeInput);
     timeInput.classList.add("time-input", "data-input-edit");
-    timeInput.value = reservation.time;
+    timeInput.value = reservation.time.slice(0, 5);
 
     const guestsInput = document.createElement('select');
     generateGuestoptions(guestsInput);
