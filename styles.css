@@ -10,6 +10,7 @@ body {
     background-color: rgb(123, 149, 171);
     align-items: center;
     padding: 0 30px;
+    margin: 0px 30px;
     z-index: 100;
     position: sticky;
     top: 0;
@@ -44,12 +45,14 @@ body {
 
 #title {
     font-size: 30px;
+    margin: 30px
 
 }
 
 #dev-form {
     border: 3px ridge;
     padding: 20px;
+    margin: 0px 30px;
     font-size: 20px;
     text-align: center;
     line-height: 40px;
@@ -95,6 +98,7 @@ body {
 #current-reservation-presentation{
     border: 3px ridge;
     padding: 5px 20px 10px;
+    margin: 0px 30px;
     text-align: center;
     line-height: 40px;
     background-color: rgb(190, 213, 234);
