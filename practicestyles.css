@@ -1,0 +1,104 @@
+#practice-tables-presentation {  
+    border: 3px ridge;
+    padding: 5px 20px 10px;
+    margin: 30px;
+    text-align: center;
+    line-height: 40px;
+    /* background-image: repeating-linear-gradient(180deg, #c9a97b 0px, #c9a97b 40px, #b8946a 40px, #b8946a 44px); */
+    background-color: rgb(244, 238, 227);
+
+}
+
+#practice-list-title {
+    font-size: 20px;
+    text-align: center;
+    vertical-align: text-top;
+    padding: 10px 20px;
+    margin: 10px 10px;
+}
+
+#practice-tables-floor {
+    position: relative;
+    aspect-ratio: 16 / 8;
+
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.practice-tables {
+    border: 1px ridge #ccc;
+    box-shadow: 2px 2px 5px #aaa;
+    font-size: 15px;
+    text-align: center;
+    background: linear-gradient(135deg, rgb(237, 242, 246), rgb(193, 204, 215));
+
+    position: absolute;
+}
+
+.square {
+    border-radius: 10px;
+    width: 10vw;
+    height: 10vw;
+}
+
+.circle {
+    border-radius: 50%;
+    width: 10vw;
+    height: 10vw;
+}
+
+.rectangle {
+    border-radius: 15px;
+    width: 17vw;
+    height: 8vw;
+}
+
+#table-1 {
+    top: 5%;
+    left: 5%;
+}
+
+#table-2 {
+    top: 5%;
+    left: 40%;
+}
+
+#table-3 {
+    top: 40%;
+    left: 8%;
+}
+
+#table-4 {
+    top: 40%;
+    left: 45%;
+}
+
+#table-5 {
+    top: 5%;
+    left: 75%;
+}
+
+#table-6 {
+    top: 40%;
+    left: 75%;
+}
+
+#table-7 {
+    top: 72%;
+    left: 8%;
+}
+
+#table-8 {
+    top: 72%;
+    left: 30%;
+}
+
+#table-9 {
+    top: 72%;
+    left: 55%;
+}
+
+#table-10 {
+    top: 72%;
+    left: 80%;
+}

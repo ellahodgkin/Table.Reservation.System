@@ -1,13 +1,25 @@
+:root {
+    --color-primary: rgb(224, 212, 190);
+    --color-secondary: rgb(244, 238, 227);
+    --color-accent: rgb(178, 60, 47);
+    --color-text:rgb(30, 27, 24);
+}
+
+/* :root {
+    --color-primary: rgb(146, 174, 199);
+    --color-secondary: rgb(190, 213, 234);
+} */
+
 body {
     padding: 0;
-    background-color: rgb(146, 174, 199);
+    background-color: var(--color-primary);
 }
 
 #nav-container {
     display: flex;
     height: 60px;
     justify-content: space-between;
-    background-color: rgb(123, 149, 171);
+    background-color: var(--color-secondary);
     align-items: center;
     padding: 0 30px;
     margin: 0px 30px;
@@ -17,8 +29,7 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     width: 100%;
     box-sizing: border-box;   
-    border: 3px ridge; 
-
+    border: 3px ridge;
 }
 
 #nav-links {
@@ -50,20 +61,20 @@ body {
 }
 
 #dev-form {
-    border: 3px ridge;
+    border: 2px ridge var(--color-accent);
     padding: 20px;
     margin: 0px 30px;
     font-size: 20px;
     text-align: center;
     line-height: 40px;
-    background-color: rgb(190, 213, 234);
+    background-color: var(--color-secondary);
 
 }
 
 .data-input-initial {
     font-size: 15px;
     padding: 8px 10px;
-    border: 2px solid #ccc;
+    /* border: 2px solid #ccc; */
     border-radius: 6px;
     outline: none;
     margin: 5px;
@@ -75,19 +86,6 @@ body {
     box-shadow: 0 0 5px rgba(76,175,80,0.4);
 }
 
-#submit {
-    font-size: 15px;
-    padding: 5px 10px;
-    margin: 10px;
-    background-color: white;
-    border-radius: 8px; 
-    cursor: pointer;
-}
-
-#submit:hover {
-    transition: all 0.3s ease;
-    background-color: rgb(225, 238, 243);
-}
 
 #result {
     font-size: 20px;
@@ -96,12 +94,12 @@ body {
 }
 
 #current-reservation-presentation{
-    border: 3px ridge;
+    border: 3px ridge ;
     padding: 5px 20px 10px;
     margin: 0px 30px;
     text-align: center;
     line-height: 40px;
-    background-color: rgb(190, 213, 234);
+    background-color: var(--color-secondary);
 }
 
 #reservation-list-title{
@@ -129,7 +127,7 @@ body {
 }
 
 
-.edit-btn, .delete-btn, .save-btn {
+.edit-btn, .delete-btn, .save-btn, .submit-btn {
     font-size: 14px;
     padding: 2px 5px;
     margin: 10px;
@@ -138,7 +136,7 @@ body {
     cursor: pointer;
 }
 
-.edit-btn:hover, .delete-btn:hover, .save-btn:hover {
+.edit-btn:hover, .delete-btn:hover, .save-btn:hover, .submit-btn:hover {
     transition: all 0.3s ease;
     background-color: rgb(225, 238, 243);
 }

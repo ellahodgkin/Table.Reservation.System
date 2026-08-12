@@ -1,0 +1,11 @@
+Plan: 
+Table display:
+- visual layout of room
+- click on table to see all reservations for that table for the week
+- tables display upcoming and current bookings
+
+Calendar view:
+- Shows bookings for the day with visual 2 hour slot
+
+Others:
+- total weekly covers
