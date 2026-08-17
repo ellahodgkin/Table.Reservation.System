@@ -9,3 +9,4 @@ Calendar view:
 
 Others:
 - total weekly covers
+- easy option to manually delete bookings once they have finished
