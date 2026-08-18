@@ -26,7 +26,7 @@ function generateTimeSlots(selectElement) {
 
 function generateGuestoptions(selectElement) {
 
-    for( let i=1; i <= 8; i++) {
+    for( let i=1; i <= 6; i++) {
 
         const option = document.createElement("option");
 

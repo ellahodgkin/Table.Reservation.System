@@ -220,12 +220,21 @@ function createEditForm(reservation, item) {
     saveButton.classList.add("save-btn", "edit-btns")
     saveButton.textContent = "Save";
 
+    const cancelButton = document.createElement('button');
+    cancelButton.classList.add("cancel-btn", "edit-btns");
+    cancelButton.textContent = "Cancel";
+
     item.innerHTML = "";
 
-    item.append(nameInput, dateInput, timeInput, guestsInput, saveButton);
+    item.append(nameInput, dateInput, timeInput, guestsInput, saveButton, cancelButton);
 
     saveButton.addEventListener("click", () => {
         updateReservation(reservation, nameInput, dateInput, timeInput, guestsInput);
+    });
+
+    cancelButton.addEventListener("click", () => {
+        renderReservations();
+        renderTableLabels(reservations);
     });
 
 };
@@ -234,7 +243,7 @@ function createEditForm(reservation, item) {
 // UPDATE RESERVATION WITH INPUTS
 async function updateReservation(reservation, nameInput, dateInput, timeInput, guestsInput) {
 
-    if (!nameInput.value || !dateInput.value) return;
+    if (!nameInput.value || !dateInput.value) return; 
 
     reservation.name = nameInput.value;
     reservation.date = dateInput.value;
@@ -316,5 +325,8 @@ function formatTableLabel(reservation) {
 }
 
 
-
+let testname = "Ella"
+if (testname === "Ella") {
+    console.log(testname.value);
+}
 
