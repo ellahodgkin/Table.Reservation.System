@@ -319,14 +319,11 @@ function renderTableLabels(reservations) {
 
 function formatTableLabel(reservation) {
 
+    const formattedDate = new Date(reservation.date);
+    const dateString = formattedDate.toLocaleDateString("en-GB");
+    const dateStringFinal = dateString.slice(0,5);
+
     const timeString = reservation.time.slice(0, 5);
 
-    return `${reservation.name} | ${timeString} | ${reservation.guests} guests`;
-}
-
-
-let testname = "Ella"
-if (testname === "Ella") {
-    console.log(testname.value);
-}
-
+    return `${reservation.name} | ${dateStringFinal} | ${timeString} | ${reservation.guests} guests`;
+};
