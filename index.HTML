@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Table Reservation System</title>
+    <title>Table Reservation System - Admin</title>
 </head>
 <body>
     <div id="nav-container">
@@ -31,7 +31,7 @@
             <label for="guests"> Guests: </label>
             <select id="guests" class="data-input-initial" ></select> <br />
 
-            <input id="submit" class="data-input-initial submit-btn" type="submit" value="Submit"> 
+            <input id="submit" class="submit-btn" type="submit" value="Submit"> 
         </form>
     </div>
 
@@ -41,6 +41,21 @@
         <h5 id="reservation-list-title"> Current Reservations: </h5>
 
         <div id="reservations-list"></div>
+    </div>
+        <div id="tables-presentation"> 
+        <h5 id="list-title"> Practice Reservations: </h5>
+        <div id="tables-floor">
+                <div class="tables rectangle" id="table-1"> Table 1</div>
+                <div class="tables rectangle" id="table-2"> Table 2</div>
+                <div class="tables square" id="table-3"> Table 3</div>
+                <div class="tables square" id="table-4"> Table 4</div>
+                <div class="tables square" id="table-5"> Table 5</div>
+                <div class="tables square" id="table-6"> Table 6</div>
+                <div class="tables circle" id="table-7"> Table 7</div> 
+                <div class="tables circle" id="table-8"> Table 8</div>
+                <div class="tables circle" id="table-9"> Table 9</div>
+                <div class="tables circle" id="table-10"> Table 10</div>
+        </div>
     </div>
     <script src="shared.js"></script>
     <script src="admin.js"></script>

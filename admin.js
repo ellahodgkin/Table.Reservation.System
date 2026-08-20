@@ -17,6 +17,7 @@ fetch("http://localhost:3000/reservations")
 .then(data => {
     reservations = data;
     renderReservations();
+    renderTableLabels(reservations);
 
 })
 .catch(error => {
@@ -67,6 +68,7 @@ form.addEventListener('submit', async function (e) {
         reservations = data; // on success data IS the updated reservations list
         console.log(`reservations: ${reservations}`)
         renderReservations();
+        renderTableLabels(reservations);
 
         const formattedDate = new Date(date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
@@ -88,12 +90,14 @@ function renderReservations() {
 
     clearReservations(container);
 
+    reservations.sort((a, b) => (new Date(`${a.date}T${a.time}`))-(new Date(`${b.date}T${b.time}`)));
+
     reservations.forEach(function(reservation) {
 
         const item = createReservationItem(reservation);
 
         container.appendChild(item);
-    })
+    });
 };
 
 
@@ -160,6 +164,7 @@ function createDeleteButton(reservation) {
             const updatedReservations = await response.json();
             reservations = updatedReservations;
             renderReservations();
+            renderTableLabels(reservations);
         } catch (error) {
             console.log(error);
             result.textContent = "Sorry, something went wrong. Please try again.";
@@ -215,12 +220,21 @@ function createEditForm(reservation, item) {
     saveButton.classList.add("save-btn", "edit-btns")
     saveButton.textContent = "Save";
 
+    const cancelButton = document.createElement('button');
+    cancelButton.classList.add("cancel-btn", "edit-btns");
+    cancelButton.textContent = "Cancel";
+
     item.innerHTML = "";
 
-    item.append(nameInput, dateInput, timeInput, guestsInput, saveButton);
+    item.append(nameInput, dateInput, timeInput, guestsInput, saveButton, cancelButton);
 
     saveButton.addEventListener("click", () => {
         updateReservation(reservation, nameInput, dateInput, timeInput, guestsInput);
+    });
+
+    cancelButton.addEventListener("click", () => {
+        renderReservations();
+        renderTableLabels(reservations);
     });
 
 };
@@ -229,7 +243,7 @@ function createEditForm(reservation, item) {
 // UPDATE RESERVATION WITH INPUTS
 async function updateReservation(reservation, nameInput, dateInput, timeInput, guestsInput) {
 
-    if (!nameInput.value || !dateInput.value) return;
+    if (!nameInput.value || !dateInput.value) return; 
 
     reservation.name = nameInput.value;
     reservation.date = dateInput.value;
@@ -250,6 +264,7 @@ async function updateReservation(reservation, nameInput, dateInput, timeInput, g
         reservations = updatedReservations;
 
         renderReservations();
+        renderTableLabels(reservations);
 
         const formattedDate = new Date(reservation.date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
@@ -262,4 +277,53 @@ async function updateReservation(reservation, nameInput, dateInput, timeInput, g
         console.log(error);
         result.textContent = "Sorry, something went wrong. Please try again.";        
     }
+};
+
+
+// TABLE PLAN
+
+function renderTableLabels(reservations) {
+
+    const tableElements = document.querySelectorAll('.tables');
+
+    tableElements.forEach(table => {
+
+        const existingDisplay = table.querySelector('.displayed-reservation');
+        if (existingDisplay) {
+            existingDisplay.remove();
+        };
+
+        const soonestReservationDisplay = document.createElement('span');
+        soonestReservationDisplay.classList.add('displayed-reservation');
+
+
+        let tableNumber = Number(table.id.split('-')[1]); 
+        let thisTablesReservations = reservations.filter(reservation => reservation.table_id === tableNumber);
+
+        const comparableDate = new Date();
+        let validReservations = thisTablesReservations.filter(reservation => new Date(`${reservation.date}T${reservation.time}`) >= comparableDate);
+        validReservations.sort((a, b) => (new Date(`${a.date}T${a.time}`))-(new Date(`${b.date}T${b.time}`)));
+
+        let soonestReservation = validReservations[0];
+
+        if (soonestReservation) {
+            soonestReservationDisplay.textContent = formatTableLabel(soonestReservation);
+        } else {
+            soonestReservationDisplay.textContent = "No upcoming bookings";
+        };
+
+        table.appendChild(soonestReservationDisplay);
+
+    });
+};
+
+function formatTableLabel(reservation) {
+
+    const formattedDate = new Date(reservation.date);
+    const dateString = formattedDate.toLocaleDateString("en-GB");
+    const dateStringFinal = dateString.slice(0,5);
+
+    const timeString = reservation.time.slice(0, 5);
+
+    return `${reservation.name} | ${dateStringFinal} | ${timeString} | ${reservation.guests} guests`;
 };
