@@ -18,7 +18,7 @@ fetch("http://localhost:3000/reservations")
     reservations = data;
     renderReservations();
     renderTableLabels(reservations);
-    renderCalendarView(reservations);
+    renderCalendarView(reservations, calendarDateSelect.value);
 
 })
 .catch(error => {
@@ -70,7 +70,7 @@ form.addEventListener('submit', async function (e) {
         console.log(`reservations: ${reservations}`)
         renderReservations();
         renderTableLabels(reservations);
-        renderCalendarView(reservations);
+        renderCalendarView(reservations, calendarDateSelect.value);
 
         const formattedDate = new Date(date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
@@ -167,7 +167,7 @@ function createDeleteButton(reservation) {
             reservations = updatedReservations;
             renderReservations();
             renderTableLabels(reservations);
-            renderCalendarView(reservations);
+            renderCalendarView(reservations, calendarDateSelect.value);
 
         } catch (error) {
             console.log(error);
@@ -239,7 +239,7 @@ function createEditForm(reservation, item) {
     cancelButton.addEventListener("click", () => {
         renderReservations();
         renderTableLabels(reservations);
-        renderCalendarView(reservations);
+        renderCalendarView(reservations, calendarDateSelect.value);
     });
 
 };
@@ -270,7 +270,7 @@ async function updateReservation(reservation, nameInput, dateInput, timeInput, g
 
         renderReservations();
         renderTableLabels(reservations);
-        renderCalendarView(reservations);
+        renderCalendarView(reservations, calendarDateSelect.value);
 
         const formattedDate = new Date(reservation.date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
@@ -355,6 +355,16 @@ function formatTableLabel(reservation) {
 
 // CALENDAR VIEW
 
+// date select 
+
+// const calendarDateSelect = document.getElementById('calendar-date-select');
+
+// calendarDateSelect.addEventListener('change', () => {
+//     const calendarSelectedDate = calendarDateSelect.value;
+//     console.log(`Calendar Selected Date: ${calendarSelectedDate}`);
+// });
+
+
 let bookingLength = 90;
 
 function timeToColumn(timeStr) {
@@ -371,20 +381,29 @@ function timeToColumn(timeStr) {
     return [columnSlotStart, columnSlotEnd];
 };
 
-function renderCalendarView(reservations) {
+
+const calendarDateSelect = document.getElementById('calendar-date-select');
+
+const today = new Date();
+const todayString = today.toISOString().slice(0, 10);
+
+calendarDateSelect.value = todayString;
+renderCalendarView(reservations, todayString);
+
+calendarDateSelect.addEventListener('change', () => {
+    renderCalendarView(reservations, calendarDateSelect.value);
+});
+
+function renderCalendarView(reservations, dateString) {
     const calendarGridBookings = document.querySelectorAll('.calendar-table-row .calendar-grid');
-    // this is a list of grids (one per table)
 
     calendarGridBookings.forEach(booking => {
         clearReservations(booking);
     });
 
-    const today = new Date();
-    const todayString = today.toISOString().slice(0, 10);
+    const dateReservations = reservations.filter(reservation => reservation.date === dateString);
 
-    const todaysReservations = reservations.filter(reservation => reservation.date === todayString);
-
-    todaysReservations.forEach(reservation => {
+    dateReservations.forEach(reservation => {
         const booking = createCalendarItem(reservation);
 
         const tableRow = document.getElementById(`calendar-table-${reservation.table_id}`);
@@ -392,7 +411,6 @@ function renderCalendarView(reservations) {
 
         targetGrid.appendChild(booking);
     });
-
 };
 
 function createCalendarItem(reservation) {

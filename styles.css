@@ -344,6 +344,24 @@ body {
     background-color: rgb(244, 238, 227);
 }
 
+#calendar-date-select-container {
+    margin: 10px 0;
+}
+
+#calendar-date-select {
+    padding: 6px 8px;
+    font-size: 12px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    margin: 4px;
+}
+
+#calendar-date-select:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76,175,80,0.4);
+}
+
 #calendar-title {
     font-size: 20px;
     text-align: center;
