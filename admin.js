@@ -87,6 +87,7 @@ form.addEventListener('submit', async function (e) {
 
 
 // HOW IT LOOKS - container
+
 function renderReservations() {
     const container = document.getElementById('reservations-list');
 
@@ -105,6 +106,7 @@ function renderReservations() {
 
 
 // CLEAR
+
 function clearReservations(container) {
     container.innerHTML = "";
 };
@@ -113,6 +115,7 @@ function clearReservations(container) {
 
 
 //CREATE RESERVATION - item with text, edit, delete
+
 function createReservationItem(reservation) {
     const item = document.createElement('div');
     const text = document.createElement('span');
@@ -133,6 +136,7 @@ function createReservationItem(reservation) {
 
 
 // FORMAT RESERVATIONS
+
 function formatReservation(reservation) {
 
     const formattedDate = new Date(reservation.date);
@@ -147,6 +151,7 @@ function formatReservation(reservation) {
 
 
 // DELETE BUTTON 
+
 function createDeleteButton(reservation) {
 
     const deleteButton = document.createElement('button');
@@ -181,6 +186,7 @@ function createDeleteButton(reservation) {
 
 
 // MAKE EDIT BUTTON
+
 function createEditButton(reservation, item) {
 
     const editButton = document.createElement('button');
@@ -198,6 +204,7 @@ function createEditButton(reservation, item) {
 
 
 // EDIT BUTTON FORM
+
 function createEditForm(reservation, item) {
     console.log("edit clicked");
 
@@ -246,6 +253,7 @@ function createEditForm(reservation, item) {
 
 
 // UPDATE RESERVATION WITH INPUTS
+
 async function updateReservation(reservation, nameInput, dateInput, timeInput, guestsInput) {
 
     if (!nameInput.value || !dateInput.value) return; 
@@ -332,6 +340,15 @@ function renderTableLabels(reservations) {
 
         if (soonestReservation) {
             soonestReservationDisplay.textContent = formatTableLabel(soonestReservation);
+
+            const today = new Date();
+            const todayString = today.toISOString().slice(0,10);
+            if(soonestReservation.date === todayString) {
+                soonestReservationDisplay.style.color = "green";
+            } else {
+                soonestReservationDisplay.style.color = "black";
+            };
+            
         } else {
             soonestReservationDisplay.textContent = "No upcoming bookings";
         };
@@ -340,6 +357,8 @@ function renderTableLabels(reservations) {
 
     });
 };
+
+// TABLE LABEL
 
 function formatTableLabel(reservation) {
 
@@ -352,27 +371,16 @@ function formatTableLabel(reservation) {
     return `${reservation.name} | ${dateStringFinal} | ${timeString} | ${reservation.guests} guests`;
 };
 
-
-// CALENDAR VIEW
-
-// date select 
-
-// const calendarDateSelect = document.getElementById('calendar-date-select');
-
-// calendarDateSelect.addEventListener('change', () => {
-//     const calendarSelectedDate = calendarDateSelect.value;
-//     console.log(`Calendar Selected Date: ${calendarSelectedDate}`);
-// });
-
-
 let bookingLength = 90;
+
+// CONVERT TIME TO COLUMN NUMBER
 
 function timeToColumn(timeStr) {
     const [hours, minutes] = timeStr.split(":").map(Number);
 
     const minutesSinceMidnight = (hours * 60) + minutes;
 
-    const baseline = 720; // Link baseline to openHour in generate time slots
+    const baseline = openHour * 60; 
 
     const columnSlotStart = ((minutesSinceMidnight-baseline)/30) + 1;
     
@@ -381,6 +389,7 @@ function timeToColumn(timeStr) {
     return [columnSlotStart, columnSlotEnd];
 };
 
+// SET CALENDAR VIEW TO TODAY ON FIRST LOAD
 
 const calendarDateSelect = document.getElementById('calendar-date-select');
 
@@ -390,9 +399,13 @@ const todayString = today.toISOString().slice(0, 10);
 calendarDateSelect.value = todayString;
 renderCalendarView(reservations, todayString);
 
+// LISTEN FOR WHEN DATE SELECT IS CHANGED
+
 calendarDateSelect.addEventListener('change', () => {
     renderCalendarView(reservations, calendarDateSelect.value);
 });
+
+// RENDER CALENDAR VIEW
 
 function renderCalendarView(reservations, dateString) {
     const calendarGridBookings = document.querySelectorAll('.calendar-table-row .calendar-grid');
@@ -412,6 +425,8 @@ function renderCalendarView(reservations, dateString) {
         targetGrid.appendChild(booking);
     });
 };
+
+// CREATE CALENDAR ITEM - booking block
 
 function createCalendarItem(reservation) {
     const booking = document.createElement('div');

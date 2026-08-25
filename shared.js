@@ -1,9 +1,9 @@
 // GENERATE TIME SLOTS
 
-function generateTimeSlots(selectElement) {
+const openHour = 12;
+const closeHour = 19;
 
-    const openHour = 12;
-    const closeHour = 19;
+function generateTimeSlots(selectElement) {
 
     for( let hour=openHour; hour <= closeHour; hour++) {
         for( let minute of [0, 30]) {
