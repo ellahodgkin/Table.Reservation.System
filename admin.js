@@ -18,6 +18,7 @@ fetch("http://localhost:3000/reservations")
     reservations = data;
     renderReservations();
     renderTableLabels(reservations);
+    renderCalendarView(reservations);
 
 })
 .catch(error => {
@@ -69,6 +70,7 @@ form.addEventListener('submit', async function (e) {
         console.log(`reservations: ${reservations}`)
         renderReservations();
         renderTableLabels(reservations);
+        renderCalendarView(reservations);
 
         const formattedDate = new Date(date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
@@ -165,6 +167,8 @@ function createDeleteButton(reservation) {
             reservations = updatedReservations;
             renderReservations();
             renderTableLabels(reservations);
+            renderCalendarView(reservations);
+
         } catch (error) {
             console.log(error);
             result.textContent = "Sorry, something went wrong. Please try again.";
@@ -235,6 +239,7 @@ function createEditForm(reservation, item) {
     cancelButton.addEventListener("click", () => {
         renderReservations();
         renderTableLabels(reservations);
+        renderCalendarView(reservations);
     });
 
 };
@@ -265,6 +270,7 @@ async function updateReservation(reservation, nameInput, dateInput, timeInput, g
 
         renderReservations();
         renderTableLabels(reservations);
+        renderCalendarView(reservations);
 
         const formattedDate = new Date(reservation.date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
@@ -326,4 +332,59 @@ function formatTableLabel(reservation) {
     const timeString = reservation.time.slice(0, 5);
 
     return `${reservation.name} | ${dateStringFinal} | ${timeString} | ${reservation.guests} guests`;
+};
+
+
+// CALENDAR VIEW
+
+let bookingLength = 90;
+
+function timeToColumn(timeStr) {
+    const [hours, minutes] = timeStr.split(":").map(Number);
+
+    const minutesSinceMidnight = (hours * 60) + minutes;
+
+    const baseline = 720; // Link baseline to openHour in generate time slots
+
+    const columnSlotStart = ((minutesSinceMidnight-baseline)/30) + 1;
+    
+    const columnSlotEnd = columnSlotStart + (bookingLength/30); 
+
+    return [columnSlotStart, columnSlotEnd];
+};
+
+function renderCalendarView(reservations) {
+    const calendarGridBookings = document.querySelectorAll('.calendar-table-row .calendar-grid');
+    // this is a list of grids (one per table)
+
+    calendarGridBookings.forEach(booking => {
+        clearReservations(booking);
+    });
+
+    const today = new Date();
+    const todayString = today.toISOString().slice(0, 10);
+
+    const todaysReservations = reservations.filter(reservation => reservation.date === todayString);
+
+    todaysReservations.forEach(reservation => {
+        const booking = createCalendarItem(reservation);
+
+        const tableRow = document.getElementById(`calendar-table-${reservation.table_id}`);
+        const targetGrid = tableRow.querySelector('.calendar-grid');
+
+        targetGrid.appendChild(booking);
+    });
+
+};
+
+function createCalendarItem(reservation) {
+    const booking = document.createElement('div');
+    booking.classList.add('calendar-booking');
+
+    booking.textContent = `${reservation.name} | ${reservation.time.slice(0, 5)} | ${reservation.guests} guests`;
+
+    const [columnSlotStart, columnSlotEnd] = timeToColumn(reservation.time);
+    booking.style.gridColumn = `${columnSlotStart} / ${columnSlotEnd}`;
+
+    return booking;
 };

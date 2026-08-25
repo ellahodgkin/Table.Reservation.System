@@ -25,7 +25,6 @@ body {
     position: sticky;
     top: 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    width: 100%;
     box-sizing: border-box;   
     border: 3px ridge;
 }
@@ -105,15 +104,14 @@ body {
 }
 
 #reservation-list-title{
-    font-size: 17px;
+    font-size: 20px;
     text-align: center;
-    vertical-align: text-top;
-    padding: 5px 10px;
-    margin: 0px 10px;
+    padding: 10px 20px;
+    margin: 10px 10px;
 }
 
 #reservations-list {
-    font-size: 17px;
+    font-size: 20px;
     text-align: center;
     padding: 5px 10px;
 
@@ -306,3 +304,71 @@ body {
         padding: 10px;
     }
 }
+
+
+/* CALENDAR VIEW  */
+
+#calendar-view {
+    border: 3px ridge;
+    padding: 5px 20px 10px;
+    margin: 30px;
+    text-align: center;
+    line-height: 40px;
+    background-color: rgb(244, 238, 227);
+}
+
+#calendar-title {
+    font-size: 20px;
+    text-align: center;
+    padding: 10px 20px;
+    margin: 10px 10px;
+}
+
+.calendar-day {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.calendar-row {
+    display: flex; 
+    align-items: stretch;
+}
+
+.calendar-row-label {
+    width: 100px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.calendar-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(17, 1fr);
+    grid-template-rows: 50px;
+    border: 1px solid #ccc;
+}
+
+.calendar-header-time-slot {
+    border-right: 1px solid #ccc;
+    text-align: center;
+    font-size: 0.8em;
+    padding: 0px 5px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.calendar-booking {
+    background-color: rgb(179, 79, 68);
+    color: white;
+    border-radius: 6px;
+    padding: 4px;
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
