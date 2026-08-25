@@ -156,8 +156,35 @@ body {
     box-shadow: 0 0 5px rgba(76,175,80,0.4);
 }
 
+/* TABLE PLAN/CALENDAR BUTTONS AND VIEWS */
 
+#display-buttons-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
 
+#show-calendar-btn, #show-tables-btn {
+    font-size: 14px;
+    padding: 2px 5px;
+    margin: 10px;
+    background-color: white;
+    border-radius: 8px; 
+    cursor: pointer;
+}
+
+#show-calendar-btn:hover, #show-tables-btn:hover {
+    transition: all 0.3s ease;
+    background-color: rgb(225, 238, 243);
+}
+
+#tables-presentation {
+    display: none;
+}
+
+#calendar-view {
+    display: block;  /* redundant, just there for clarity */
+}
 
 /* TABLE PLAN */
 

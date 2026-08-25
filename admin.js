@@ -286,6 +286,24 @@ async function updateReservation(reservation, nameInput, dateInput, timeInput, g
 };
 
 
+// TABLE PLAN/CALENDAR VIEW BUTTONS
+
+const calendarView = document.getElementById('calendar-view');
+const tableView = document.getElementById('tables-presentation');
+
+const showCalendarButton = document.getElementById('show-calendar-btn');
+const showTablesButton = document.getElementById('show-tables-btn');
+
+showCalendarButton.addEventListener("click", () => {
+    calendarView.style.display = "block";
+    tableView.style.display = "none";
+});
+
+showTablesButton.addEventListener("click", () => {
+    calendarView.style.display = "none";
+    tableView.style.display = "block";
+});
+
 // TABLE PLAN
 
 function renderTableLabels(reservations) {
