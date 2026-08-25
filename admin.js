@@ -18,6 +18,7 @@ fetch("http://localhost:3000/reservations")
     reservations = data;
     renderReservations();
     renderTableLabels(reservations);
+    renderCalendarView(reservations, calendarDateSelect.value);
 
 })
 .catch(error => {
@@ -69,6 +70,7 @@ form.addEventListener('submit', async function (e) {
         console.log(`reservations: ${reservations}`)
         renderReservations();
         renderTableLabels(reservations);
+        renderCalendarView(reservations, calendarDateSelect.value);
 
         const formattedDate = new Date(date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
@@ -165,6 +167,8 @@ function createDeleteButton(reservation) {
             reservations = updatedReservations;
             renderReservations();
             renderTableLabels(reservations);
+            renderCalendarView(reservations, calendarDateSelect.value);
+
         } catch (error) {
             console.log(error);
             result.textContent = "Sorry, something went wrong. Please try again.";
@@ -235,6 +239,7 @@ function createEditForm(reservation, item) {
     cancelButton.addEventListener("click", () => {
         renderReservations();
         renderTableLabels(reservations);
+        renderCalendarView(reservations, calendarDateSelect.value);
     });
 
 };
@@ -265,6 +270,7 @@ async function updateReservation(reservation, nameInput, dateInput, timeInput, g
 
         renderReservations();
         renderTableLabels(reservations);
+        renderCalendarView(reservations, calendarDateSelect.value);
 
         const formattedDate = new Date(reservation.date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
@@ -279,6 +285,24 @@ async function updateReservation(reservation, nameInput, dateInput, timeInput, g
     }
 };
 
+
+// TABLE PLAN/CALENDAR VIEW BUTTONS
+
+const calendarView = document.getElementById('calendar-view');
+const tableView = document.getElementById('tables-presentation');
+
+const showCalendarButton = document.getElementById('show-calendar-btn');
+const showTablesButton = document.getElementById('show-tables-btn');
+
+showCalendarButton.addEventListener("click", () => {
+    calendarView.style.display = "block";
+    tableView.style.display = "none";
+});
+
+showTablesButton.addEventListener("click", () => {
+    calendarView.style.display = "none";
+    tableView.style.display = "block";
+});
 
 // TABLE PLAN
 
@@ -326,4 +350,77 @@ function formatTableLabel(reservation) {
     const timeString = reservation.time.slice(0, 5);
 
     return `${reservation.name} | ${dateStringFinal} | ${timeString} | ${reservation.guests} guests`;
+};
+
+
+// CALENDAR VIEW
+
+// date select 
+
+// const calendarDateSelect = document.getElementById('calendar-date-select');
+
+// calendarDateSelect.addEventListener('change', () => {
+//     const calendarSelectedDate = calendarDateSelect.value;
+//     console.log(`Calendar Selected Date: ${calendarSelectedDate}`);
+// });
+
+
+let bookingLength = 90;
+
+function timeToColumn(timeStr) {
+    const [hours, minutes] = timeStr.split(":").map(Number);
+
+    const minutesSinceMidnight = (hours * 60) + minutes;
+
+    const baseline = 720; // Link baseline to openHour in generate time slots
+
+    const columnSlotStart = ((minutesSinceMidnight-baseline)/30) + 1;
+    
+    const columnSlotEnd = columnSlotStart + (bookingLength/30); 
+
+    return [columnSlotStart, columnSlotEnd];
+};
+
+
+const calendarDateSelect = document.getElementById('calendar-date-select');
+
+const today = new Date();
+const todayString = today.toISOString().slice(0, 10);
+
+calendarDateSelect.value = todayString;
+renderCalendarView(reservations, todayString);
+
+calendarDateSelect.addEventListener('change', () => {
+    renderCalendarView(reservations, calendarDateSelect.value);
+});
+
+function renderCalendarView(reservations, dateString) {
+    const calendarGridBookings = document.querySelectorAll('.calendar-table-row .calendar-grid');
+
+    calendarGridBookings.forEach(booking => {
+        clearReservations(booking);
+    });
+
+    const dateReservations = reservations.filter(reservation => reservation.date === dateString);
+
+    dateReservations.forEach(reservation => {
+        const booking = createCalendarItem(reservation);
+
+        const tableRow = document.getElementById(`calendar-table-${reservation.table_id}`);
+        const targetGrid = tableRow.querySelector('.calendar-grid');
+
+        targetGrid.appendChild(booking);
+    });
+};
+
+function createCalendarItem(reservation) {
+    const booking = document.createElement('div');
+    booking.classList.add('calendar-booking');
+
+    booking.textContent = `${reservation.name} | ${reservation.time.slice(0, 5)} | ${reservation.guests} guests`;
+
+    const [columnSlotStart, columnSlotEnd] = timeToColumn(reservation.time);
+    booking.style.gridColumn = `${columnSlotStart} / ${columnSlotEnd}`;
+
+    return booking;
 };
