@@ -7,24 +7,47 @@ let reservations = [];
 const timeSelect = document.getElementById("time");
 const guestsSelect = document.getElementById("guests");
 
-fetch("http://localhost:3000/reservations")
+let tables = [];
+
+fetch("http://localhost:3000/tables")
 .then(response => {
     if (!response.ok) {
         throw new Error("Server Error")
     }
-    return response.json()
+    return response.json()    
 })
 .then(data => {
-    reservations = data;
-    renderReservations();
-    renderTableLabels(reservations);
-    renderCalendarView(reservations, calendarDateSelect.value);
+    tables = data;
+    console.log(tables);
+    renderTablePlan(tables);
+    renderCalendarRows(tables);
 
+    fetch("http://localhost:3000/reservations")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Server Error")
+        }
+        return response.json()
+        })
+    .then(data => {
+        reservations = data;
+        renderReservations();
+        renderTableLabels(reservations);
+        renderCalendarView(reservations, calendarDateSelect.value);
+
+    })
+    .catch(error => {
+        console.log(error);
+        result.textContent = "Sorry, something went wrong. Please try again."
+    });
 })
 .catch(error => {
     console.log(error);
     result.textContent = "Sorry, something went wrong. Please try again."
-})
+});
+
+
+
 
 generateTimeSlots(timeSelect);
 generateGuestoptions(guestsSelect);
@@ -314,6 +337,31 @@ showTablesButton.addEventListener("click", () => {
 
 // TABLE PLAN
 
+
+const tableFloorPlan = document.getElementById("tables-floor");
+
+function renderTablePlan(tables) {
+
+    clearReservations(tableFloorPlan);
+
+    tables.forEach(table => {
+        console.log(table);
+        const tablePopulation = document.createElement('div');
+        tablePopulation.textContent = `Table ${table.id}`;
+        tablePopulation.classList.add('tables');
+        tablePopulation.classList.add(`${table.shape}`);
+        tablePopulation.setAttribute("id", `table-${table.id}`);
+        console.log(tablePopulation);
+
+        tableFloorPlan.appendChild(tablePopulation);
+
+        tablePopulation.style.top = `${table.pos_top}`;
+        tablePopulation.style.left = `${table.pos_left}`;
+    });
+};
+
+
+
 function renderTableLabels(reservations) {
 
     const tableElements = document.querySelectorAll('.tables');
@@ -388,6 +436,40 @@ function timeToColumn(timeStr) {
 
     return [columnSlotStart, columnSlotEnd];
 };
+
+
+// RENDER CALENDAR ROWS WITH TABLES 
+
+const calendarParent = document.getElementById("calendar");
+
+function renderCalendarRows(tables) {
+
+    const existingRows = calendarParent.querySelectorAll('.calendar-table-row');
+    existingRows.forEach(row => row.remove());
+
+    tables.forEach(table => {
+
+        console.log(table);
+
+        const calendarRow = document.createElement('div');
+        calendarRow.classList.add("calendar-row");
+        calendarRow.classList.add("calendar-table-row");
+        calendarRow.setAttribute("id", `calendar-table-${table.id}`);
+
+        const calendarRowLabel = document.createElement('div');
+        calendarRowLabel.textContent = `Table ${table.id}`;
+        calendarRowLabel.classList.add("calendar-row-label");
+
+        const calendarGrid = document.createElement('div');
+        calendarGrid.classList.add("calendar-grid");
+
+        calendarRow.appendChild(calendarRowLabel);
+        calendarRow.appendChild(calendarGrid);
+        calendarParent.appendChild(calendarRow);
+
+    });
+};
+
 
 // SET CALENDAR VIEW TO TODAY ON FIRST LOAD
 
