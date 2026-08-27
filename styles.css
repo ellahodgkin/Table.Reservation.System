@@ -212,11 +212,11 @@ body {
 }
 
 .tables {
-    border: 1px ridge #ccc;
-    box-shadow: 2px 2px 5px #aaa;
+    border: 1px ridge var(--color-accent);
+    box-shadow: 2px 2px 8px #c3bfbf;
     font-size: 1.1em;
     text-align: center;
-    background: linear-gradient(135deg, rgb(237, 242, 246), rgb(193, 204, 215));
+    background: linear-gradient(135deg, rgb(179, 149, 97), rgb(206, 187, 149));
 
     position: absolute;
 
@@ -228,6 +228,12 @@ body {
     padding: 6px;
     box-sizing: border-box;
     overflow: hidden;
+}
+
+.tables:hover {
+    transition: all 0.3s ease;
+    transform: scale(1.03);
+    box-shadow: 4px 4px 12px #c3bfbf;
 }
 
 .square {
@@ -373,9 +379,26 @@ body {
     background-color: #f9f9f9;
 }
 
+#calendar {
+    padding: 12px;
+    background-color: rgb(248, 247, 247);
+    border: 2px ridge;
+    box-shadow: 0 0 5px rgba(175, 236, 177, 0.4);
+    border-radius: 7px;
+}
+
 .calendar-row {
     display: flex; 
     align-items: stretch;
+}
+
+.calendar-row:first-child {
+    border-radius: 6px 6px 0 0;
+}
+
+.calendar-row:first-child .calendar-row-label,
+.calendar-row:first-child .calendar-header-time-slot {
+    font-weight: 550;
 }
 
 .calendar-row-label {
@@ -383,6 +406,15 @@ body {
     flex-shrink: 0;
     display: flex;
     align-items: center;
+
+    padding: 0 10px;
+    border: 1px solid #ccc;
+
+    background-color: var(--color-secondary);
+    border-radius: 4px;
+    border-right: none;
+    margin: 1px 2px;
+    font-weight: 550;
 }
 
 .calendar-grid {
@@ -391,26 +423,43 @@ body {
     grid-template-columns: repeat(17, 1fr);
     grid-template-rows: 50px;
     border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .calendar-header-time-slot {
     border-right: 1px solid #ccc;
+    border-top: none;
     text-align: center;
     font-size: 0.8em;
     padding: 0px 5px;
     display: flex;
     align-items: center;
     overflow: hidden;
+
+    border-radius: 4px;
+}
+
+.calendar-table-row:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.03);
 }
 
 .calendar-booking {
-    background-color: rgb(179, 79, 68);
+    background-color: rgb(192, 69, 55);
     color: white;
     border-radius: 6px;
-    padding: 4px;
+    padding: 4px 6px;
     font-size: 0.8em;
     display: flex;
     align-items: center;
     overflow: hidden;
+
+    text-overflow: ellipsis; 
+    white-space: nowrap;
 }
 
+.calendar-booking:hover {
+    transition: all 0.3s ease;
+    background-color: rgb(176, 51, 37);
+    transform: scale(1.03);
+    box-shadow: 4px 4px 12px #c3bfbf;
+}

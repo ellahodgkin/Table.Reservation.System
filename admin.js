@@ -432,7 +432,7 @@ function createCalendarItem(reservation) {
     const booking = document.createElement('div');
     booking.classList.add('calendar-booking');
 
-    booking.textContent = `${reservation.name} | ${reservation.time.slice(0, 5)} | ${reservation.guests} guests`;
+    booking.textContent = `${reservation.name}-${reservation.time.slice(0, 5)}-${reservation.guests} guests`;
 
     const [columnSlotStart, columnSlotEnd] = timeToColumn(reservation.time);
     booking.style.gridColumn = `${columnSlotStart} / ${columnSlotEnd}`;
