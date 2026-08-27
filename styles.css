@@ -255,55 +255,6 @@ body {
     height: auto;
 }
 
-#table-1 {
-    top: 5%;
-    left: 5%;
-}
-
-#table-2 {
-    top: 5%;
-    left: 40%;
-}
-
-#table-3 {
-    top: 40%;
-    left: 8%;
-}
-
-#table-4 {
-    top: 40%;
-    left: 45%;
-}
-
-#table-5 {
-    top: 5%;
-    left: 75%;
-}
-
-#table-6 {
-    top: 40%;
-    left: 75%;
-}
-
-#table-7 {
-    top: 72%;
-    left: 8%;
-}
-
-#table-8 {
-    top: 72%;
-    left: 30%;
-}
-
-#table-9 {
-    top: 72%;
-    left: 55%;
-}
-
-#table-10 {
-    top: 72%;
-    left: 80%;
-}
 
 .displayed-reservation {
     font-size: 0.9em;

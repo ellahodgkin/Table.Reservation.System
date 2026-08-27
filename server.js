@@ -21,8 +21,21 @@ function timeToMinutes(timeStr) {
     return hours * 60 + minutes;
 };
 
-// GET (output)
+
 app.get("/", (req, res) => res.send("Hello, world!"));
+
+// GET (getting the table layout)
+
+app.get("/tables", async (req, res) => {
+    const result = await pool.query(
+        "SELECT * FROM restaurant_tables"
+    );
+    res.json(result.rows);
+});
+
+
+
+// GET (output)
 
 app.get("/reservations", async (req, res) => {
     const result = await pool.query(
