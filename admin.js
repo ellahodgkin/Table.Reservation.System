@@ -47,8 +47,6 @@ fetch("http://localhost:3000/tables")
 });
 
 
-
-
 generateTimeSlots(timeSelect);
 generateGuestoptions(guestsSelect);
 
@@ -521,3 +519,86 @@ function createCalendarItem(reservation) {
 
     return booking;
 };
+
+
+// STATISTICS DISPLAY 
+
+function parseDateLocal(dateStr) {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day); // JS months are 0-indexed
+};
+
+function formatDateLocal(dateObj) {
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // pads single digits with a leading 0
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+function getStatisticsDateRange(dateStr, mode) {
+    const dateObj = parseDateLocal(dateStr);
+
+    if (mode === 'day') {
+        return [dateStr, dateStr];
+    };
+
+    if (mode === 'week') {
+        const dayOfWeek = dateObj.getDay(); // 0 = Sunday, 1 = Monday, ... 6 = Saturday
+        const diffToMonday = (dayOfWeek === 0) ? -6 : 1 - dayOfWeek;
+
+        const monday = new Date(dateObj);
+        monday.setDate(dateObj.getDate() + diffToMonday);
+
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+
+        return [formatDateLocal(monday), formatDateLocal(sunday)];
+    }; 
+
+    if (mode === 'month') {
+        const firstDay = new Date(dateObj.getFullYear(), dateObj.getMonth(), 1);
+        const lastDay = new Date(dateObj.getFullYear(), dateObj.getMonth() + 1, 0); // day 0 = last day of previous month
+
+        return [formatDateLocal(firstDay), formatDateLocal(lastDay)];
+    };
+};
+
+let currentStatisticsMode = 'day';
+
+const statisticsDateSelect = document.getElementById('statistics-date-select');
+const statsModeButtons = document.querySelectorAll('.stats-mode-btn');
+
+function updateStatistics() {
+    const dateStr = statisticsDateSelect.value;
+
+    let filteredReservations;
+
+    if (currentStatisticsMode === 'all' || !dateStr) {
+        filteredReservations = reservations;
+    } else {
+        const [start, end] = getStatisticsDateRange(dateStr, currentStatisticsMode);
+        filteredReservations = reservations.filter(reservation => reservation.date >= start && reservation.date <= end);
+    }
+
+    const totalReservations = filteredReservations.length;
+    const totalGuests = filteredReservations.reduce((sum, reservation) => sum + Number(reservation.guests), 0);
+
+    let totalReservationsDisplay = document.getElementById('total-reservations');
+    totalReservationsDisplay.textContent = `Total Reservations: ${totalReservations}`;
+
+    let totalGuestsDisplay = document.getElementById('total-guests');
+    totalGuestsDisplay.textContent = `Total Guests: ${totalGuests}`;
+};
+
+
+statsModeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        currentStatisticsMode = button.dataset.mode;
+        updateStatistics();
+    });
+});
+
+statisticsDateSelect.addEventListener('change', updateStatistics);
+
+
+

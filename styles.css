@@ -127,7 +127,7 @@ body {
 }
 
 
-.edit-btn, .delete-btn, .save-btn, .submit-btn, .cancel-btn {
+.edit-btn, .delete-btn, .save-btn, .submit-btn, .cancel-btn, .stats-mode-btn {
     font-size: 14px;
     padding: 2px 5px;
     margin: 10px;
@@ -136,7 +136,7 @@ body {
     cursor: pointer;
 }
 
-.edit-btn:hover, .delete-btn:hover, .save-btn:hover, .submit-btn:hover, .cancel-btn:hover {
+.edit-btn:hover, .delete-btn:hover, .save-btn:hover, .submit-btn:hover, .cancel-btn:hover, .stats-mode-btn:hover {
     transition: all 0.3s ease;
     background-color: rgb(225, 238, 243);
 }
@@ -413,4 +413,51 @@ body {
     background-color: rgb(176, 51, 37);
     transform: scale(1.03);
     box-shadow: 4px 4px 12px #c3bfbf;
+}
+
+
+
+
+/* STATISTICS SECTION  */
+
+#statistics-presentation {
+    border: 3px ridge;
+    padding: 5px 20px 10px;
+    margin: 30px;
+    text-align: center;
+    line-height: 40px;
+    background-color: rgb(244, 238, 227);
+}
+
+#statistics-title {
+    font-size: 20px;
+    text-align: center;
+    padding: 10px 20px;
+    margin: 10px 10px;
+}
+
+#statistics-container {
+    padding: 12px;
+    background-color: rgb(248, 247, 247);
+    border: 2px ridge;
+    box-shadow: 0 0 5px rgba(175, 236, 177, 0.4);
+    border-radius: 7px;
+}
+
+#statistics-date-select-container {
+    margin: 10px 0;
+}
+
+#statistics-date-select {
+    padding: 6px 8px;
+    font-size: 12px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    margin: 4px;
+}
+
+#statistics-date-select:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76,175,80,0.4);
 }

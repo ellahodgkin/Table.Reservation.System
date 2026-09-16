@@ -86,9 +86,32 @@
                         <div class="calendar-header-time-slot">20:00</div>
                     </div>
             </div> 
+  
+        </div>
+    </div>
 
+    <div id="statistics-presentation"> 
+        <h5 id="statistics-title"> Reservations Statistics: </h5>
 
-            
+        <div id="statistics-date-select-container">
+
+            <label for="statistics-date-select"><strong>Select Date:</strong></label>
+            <input type="date" id="statistics-date-select">
+
+        </div>
+
+        <div id="statistics-mode-buttons">
+            <button class="stats-mode-btn" data-mode="day">Day</button>
+            <button class="stats-mode-btn" data-mode="week">Week</button>
+            <button class="stats-mode-btn" data-mode="month">Month</button>
+            <button class="stats-mode-btn" data-mode="all">All</button>
+        </div>
+
+        <div id="statistics-container">
+
+            <div id="total-reservations"></div>
+            <div id="total-guests"></div>
+
         </div>
     </div>
 
@@ -96,8 +119,6 @@
     <script src="admin.js"></script>
 </body>
 </html>
-
-
 
 
 
