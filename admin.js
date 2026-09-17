@@ -478,11 +478,13 @@ const todayString = today.toISOString().slice(0, 10);
 
 calendarDateSelect.value = todayString;
 renderCalendarView(reservations, todayString);
+renderCurrentTimeLine();
 
 // LISTEN FOR WHEN DATE SELECT IS CHANGED
 
 calendarDateSelect.addEventListener('change', () => {
     renderCalendarView(reservations, calendarDateSelect.value);
+    renderCurrentTimeLine();
 });
 
 // RENDER CALENDAR VIEW
@@ -520,6 +522,34 @@ function createCalendarItem(reservation) {
     return booking;
 };
 
+// CURRENT TIME LINE
+
+function renderCurrentTimeLine() {
+    const existingLine = document.getElementById('current-time-line');
+    if (existingLine) existingLine.remove();
+
+    const now = new Date();
+    const todayString = now.toISOString().slice(0,10);
+
+    if (calendarDateSelect.value !== todayString) return;
+
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+    const baseline = openHour * 60;
+    const totalColumns = document.querySelectorAll('.calendar-header-time-slot').length;
+    const totalMinutes = totalColumns * 30;
+    const fraction = (nowMinutes - baseline) / totalMinutes;
+
+    if (fraction < 0 || fraction > 1) return; // outside open hours
+
+    const line = document.createElement('div');
+    line.classList.add('current-time-line');
+    line.setAttribute('id', 'current-time-line');
+    line.style.left = `calc(100px + (100% - 100px) * ${fraction})`;
+
+    calendarParent.appendChild(line);
+};
+
+setInterval(renderCurrentTimeLine, 600000); // keeps it live, updates every minute
 
 // STATISTICS DISPLAY 
 

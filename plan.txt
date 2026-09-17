@@ -1,10 +1,7 @@
-Plan: 
-Table display:
-- click on table to see all reservations for that table for the week
-
-
-Others:
-- easy option to manually delete bookings once they have finished
+OPTIONS TO DO:
 - when booking slot not available remove times
 - admin to be able to manually change what table people are on
 - a line that shows what time it is now on the calendar
+- authentication!!
+- customers database? name, email, phone number
+- 
