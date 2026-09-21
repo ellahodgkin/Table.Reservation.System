@@ -4,27 +4,71 @@ const result = document.getElementById('result');
 
 let reservations = [];
 
+let tables = [];
+
 const timeSelect = document.getElementById("time");
 const guestsSelect = document.getElementById("guests");
+const dateSelect = document.getElementById("date");
 
-fetch("http://localhost:3000/reservations")
+fetch("http://localhost:3000/tables")
 .then(response => {
     if (!response.ok) {
         throw new Error("Server Error")
     }
-    return response.json()
+    return response.json()    
 })
 .then(data => {
-    reservations = data;
+    tables = data;
 
+    fetch("http://localhost:3000/reservations")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Server Error")
+        }
+        return response.json()
+        })
+    .then(data => {
+        reservations = data;
+
+    })
+    .catch(error => {
+        console.log(error);
+        result.textContent = "Sorry, something went wrong. Please try again."
+    });
 })
 .catch(error => {
     console.log(error);
     result.textContent = "Sorry, something went wrong. Please try again."
-})
+});
 
 generateTimeSlots(timeSelect);
 generateGuestoptions(guestsSelect);
+
+
+function updateTimeOptions() {
+    const selectedDate = dateSelect.value;
+
+    const selectedGuests = guestsSelect.value;
+
+    const availableTimeSlots = getAvailableTimeSlots(selectedDate, selectedGuests, reservations, tables);
+
+    timeSelect.innerHTML = "";
+
+    availableTimeSlots.forEach(slot => {
+        const option = document.createElement("option");
+        option.value = slot;
+        option.textContent = slot;
+        timeSelect.appendChild(option);
+    });
+};
+
+dateSelect.addEventListener('change', () => {
+    updateTimeOptions();
+});
+
+guestsSelect.addEventListener('change', () => {
+    updateTimeOptions();
+});
 
 // SUBMIT
 form.addEventListener('submit', async function (e) {
@@ -65,6 +109,7 @@ form.addEventListener('submit', async function (e) {
 
         reservations = data; // on success data IS the updated reservations list
         console.log(`reservations: ${reservations}`)
+        updateTimeOptions();
 
         const formattedDate = new Date(date);
         const dateString = formattedDate.toLocaleDateString("en-GB");

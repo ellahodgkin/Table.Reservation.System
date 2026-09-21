@@ -1,7 +1,7 @@
 OPTIONS TO DO:
-- when booking slot not available remove times
+- when booking slot not available remove times ✅
 - admin to be able to manually change what table people are on
-- a line that shows what time it is now on the calendar
+- a line that shows what time it is now on the calendar ✅ actually might need readressing!
 - authentication!!
 - customers database? name, email, phone number
-- 
+- admin overrides all round

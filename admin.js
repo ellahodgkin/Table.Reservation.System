@@ -6,6 +6,7 @@ let reservations = [];
 
 const timeSelect = document.getElementById("time");
 const guestsSelect = document.getElementById("guests");
+const dateSelect = document.getElementById("date");
 
 let tables = [];
 
@@ -34,6 +35,7 @@ fetch("http://localhost:3000/tables")
         renderReservations();
         renderTableLabels(reservations);
         renderCalendarView(reservations, calendarDateSelect.value);
+        updateTimeOptions();
 
     })
     .catch(error => {
@@ -46,9 +48,33 @@ fetch("http://localhost:3000/tables")
     result.textContent = "Sorry, something went wrong. Please try again."
 });
 
-
 generateTimeSlots(timeSelect);
 generateGuestoptions(guestsSelect);
+
+function updateTimeOptions() {
+    const selectedDate = dateSelect.value;
+
+    const selectedGuests = guestsSelect.value;
+
+    const availableTimeSlots = getAvailableTimeSlots(selectedDate, selectedGuests, reservations, tables);
+
+    timeSelect.innerHTML = "";
+
+    availableTimeSlots.forEach(slot => {
+        const option = document.createElement("option");
+        option.value = slot;
+        option.textContent = slot;
+        timeSelect.appendChild(option);
+    });
+};
+
+dateSelect.addEventListener('change', () => {
+    updateTimeOptions();
+});
+
+guestsSelect.addEventListener('change', () => {
+    updateTimeOptions();
+});
 
 // SUBMIT
 form.addEventListener('submit', async function (e) {
@@ -92,6 +118,7 @@ form.addEventListener('submit', async function (e) {
         renderReservations();
         renderTableLabels(reservations);
         renderCalendarView(reservations, calendarDateSelect.value);
+        updateTimeOptions();
 
         const formattedDate = new Date(date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
@@ -194,6 +221,7 @@ function createDeleteButton(reservation) {
             renderReservations();
             renderTableLabels(reservations);
             renderCalendarView(reservations, calendarDateSelect.value);
+            updateTimeOptions();
 
         } catch (error) {
             console.log(error);
@@ -239,14 +267,32 @@ function createEditForm(reservation, item) {
     dateInput.value = reservation.date;
 
     const timeInput = document.createElement('select');
-    generateTimeSlots(timeInput);
     timeInput.classList.add("time-input", "data-input-edit");
-    timeInput.value = reservation.time.slice(0, 5);
 
     const guestsInput = document.createElement('select');
     generateGuestoptions(guestsInput);
     guestsInput.classList.add("guests-input", "data-input-edit");
     guestsInput.value = reservation.guests;
+
+    function updateEditTimeOptions() {
+        const otherReservations = reservations.filter(r => r.id !== reservation.id);
+
+        const availableTimeSlots = getAvailableTimeSlots(dateInput.value, guestsInput.value, otherReservations, tables);
+
+        timeInput.innerHTML = "";
+
+        availableTimeSlots.forEach(slot =>{
+            const option = document.createElement("option");
+            option.value = slot;
+            option.textContent = slot;
+            timeInput.appendChild(option);
+
+        });
+    };
+
+    updateEditTimeOptions();
+    timeInput.value = reservation.time.slice(0, 5);
+
 
     const saveButton = document.createElement('button');
     saveButton.classList.add("save-btn", "edit-btns")
@@ -259,6 +305,9 @@ function createEditForm(reservation, item) {
     item.innerHTML = "";
 
     item.append(nameInput, dateInput, timeInput, guestsInput, saveButton, cancelButton);
+
+    dateInput.addEventListener('change', updateEditTimeOptions);
+    guestsInput.addEventListener('change', updateEditTimeOptions);
 
     saveButton.addEventListener("click", () => {
         updateReservation(reservation, nameInput, dateInput, timeInput, guestsInput);
@@ -300,6 +349,7 @@ async function updateReservation(reservation, nameInput, dateInput, timeInput, g
         renderReservations();
         renderTableLabels(reservations);
         renderCalendarView(reservations, calendarDateSelect.value);
+        updateTimeOptions();
 
         const formattedDate = new Date(reservation.date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
