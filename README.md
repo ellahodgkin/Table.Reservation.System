@@ -12,6 +12,39 @@ A full-stack restaurant booking app with a customer booking page and an admin da
 
 Node.js, Express 5, PostgreSQL (`pg`), HTML, CSS, vanilla JavaScript
 
+## Set Up Instructions
+
+Requires Node.js and a local PostgreSQL.
+
+### 1. Clone the repo and install dependencies
+
+```bash
+git clone https://github.com/ellahodgkin/Table.Reservation.System.git
+cd Table.Reservation.System/backend
+npm install
+```
+
+### 2. Create the database
+
+```bash
+createdb table_reservation
+psql -d table_reservation -f db/schema.sql
+```
+
+This creates the `restaurant_tables` and `reservations` tables and fills `restaurant_tables` with the restaurant's table layout. Re-running this file resets both tables and deletes existing reservations.
+
+### 3. Start the server
+
+```bash
+npm run dev
+```
+
+The API runs at `http://localhost:3000`. You should see `My Table Reservation System - listening on port 3000!`.
+
+### 4. Open the app
+
+Open `frontend/customer.html` (customer booking page) or `frontend/admin.html` (admin dashboard) in your browser.
+
 ## API
 
 | Method | Endpoint            | Description                      |
