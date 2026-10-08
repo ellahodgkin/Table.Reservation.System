@@ -4,9 +4,13 @@ const express = require("express");
 const app = express();
 const cors = require('cors');
 const { Pool, types } = require("pg");
+
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
+
 types.setTypeParser(1082, (val) => val);
 // "for this type just give me the raw string don't turn it into a date object"
-
 
 app.use(express.json()); // This is important! It allows us to parse JSON request bodies.
 
