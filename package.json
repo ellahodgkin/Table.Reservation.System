@@ -1,7 +1,21 @@
 {
+  "name": "table-reservation-system",
+  "version": "1.0.0",
+  "description": "A table reservation system",
+  "main": "backend/server.js",
+  "scripts": {
+     "start": "node backend/server.js",
+     "dev": "nodemon backend/server.js"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
     "dotenv": "^18.0.6",
-    "express-session": "^1.19.0"
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }

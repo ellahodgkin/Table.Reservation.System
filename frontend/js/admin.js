@@ -10,7 +10,7 @@ const dateSelect = document.getElementById("date");
 
 let tables = [];
 
-fetch("http://localhost:3000/tables")
+fetch("http://127.0.0.1:3000/tables")
 .then(response => {
     if (!response.ok) {
         throw new Error("Server Error")
@@ -23,7 +23,7 @@ fetch("http://localhost:3000/tables")
     renderTablePlan(tables);
     renderCalendarRows(tables);
 
-    fetch("http://localhost:3000/reservations")
+    fetch("http://127.0.0.1:3000/reservations")
     .then(response => {
         if (!response.ok) {
             throw new Error("Server Error")
@@ -101,7 +101,7 @@ form.addEventListener('submit', async function (e) {
     };
 
     try {
-        const response = await fetch("http://localhost:3000/reservations", {
+        const response = await fetch("http://127.0.0.1:3000/reservations", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(reservation)
@@ -209,9 +209,10 @@ function createDeleteButton(reservation) {
 
     deleteButton.addEventListener('click', async function() {
         try {
-            const response = await fetch(`http://localhost:3000/reservations/${reservation.id}`, {
+            const response = await fetch(`http://127.0.0.1:3000/reservations/${reservation.id}`, {
                 method: "DELETE",
                 headers: {"Content-Type": "application/json"},
+                credentials: "include"
             });
             if (!response.ok) {
                 throw new Error("Server Error")
@@ -334,10 +335,11 @@ async function updateReservation(reservation, nameInput, dateInput, timeInput, g
     reservation.guests = guestsInput.value;
 
     try {
-        const response = await fetch(`http://localhost:3000/reservations/${reservation.id}`, {
+        const response = await fetch(`http://127.0.0.1:3000/reservations/${reservation.id}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(reservation)
+            body: JSON.stringify(reservation),
+            credentials: "include"
         });
         if (!response.ok) {
             throw new Error("Server Error")
@@ -681,4 +683,28 @@ statsModeButtons.forEach(button => {
 statisticsDateSelect.addEventListener('change', updateStatistics);
 
 
+// LOG OUT BUTTON 
 
+ let logOut = document.getElementById('log-out-btn');
+
+ logOut.addEventListener( 'click', async function (e) {
+    e.preventDefault();
+
+    try {
+        const response = await fetch("http://127.0.0.1:3000/logout", {
+            method: "POST",
+            credentials: "include"
+        });
+
+
+        if (!response.ok) {
+            throw new Error("Server Error");
+        }
+
+        window.location.href = 'login.html';
+
+    } catch (error) {
+        console.log(error);
+        result.textContent = "Sorry, something went wrong. Please try again.";
+    };
+});
