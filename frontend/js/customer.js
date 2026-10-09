@@ -10,7 +10,7 @@ const timeSelect = document.getElementById("time");
 const guestsSelect = document.getElementById("guests");
 const dateSelect = document.getElementById("date");
 
-fetch("http://localhost:3000/tables")
+fetch("http://127.0.0.1:3000/tables")
 .then(response => {
     if (!response.ok) {
         throw new Error("Server Error")
@@ -20,7 +20,7 @@ fetch("http://localhost:3000/tables")
 .then(data => {
     tables = data;
 
-    fetch("http://localhost:3000/reservations")
+    fetch("http://127.0.0.1:3000/reservations")
     .then(response => {
         if (!response.ok) {
             throw new Error("Server Error")
@@ -95,7 +95,7 @@ form.addEventListener('submit', async function (e) {
     };
 
     try {
-        const response = await fetch("http://localhost:3000/reservations", {
+        const response = await fetch("http://127.0.0.1:3000/reservations", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(reservation)

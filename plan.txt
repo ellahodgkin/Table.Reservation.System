@@ -5,3 +5,5 @@ OPTIONS TO DO:
 - authentication!!
 - customers database? name, email, phone number
 - admin overrides all round
+- clear past bookings, or change to red text, or have seperate section
+- no bookings allowed to be made after the current date and time

@@ -5,7 +5,10 @@ const app = express();
 const cors = require('cors');
 const { Pool, types } = require("pg");
 
+require('dotenv').config(); // reads .env file
+// session_secret becomes available as process.env.SESSION_SECRET
 const bcrypt = require('bcrypt');
+const session = require('express-session')
 const saltRounds = 10;
 
 
@@ -14,7 +17,23 @@ types.setTypeParser(1082, (val) => val);
 
 app.use(express.json()); // This is important! It allows us to parse JSON request bodies.
 
-app.use(cors());
+// app.use(cors());
+
+app.use(cors({
+    origin: "http://127.0.0.1:5500", // wherever your HTML is served from
+    credentials: true
+}));
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: false, // true once you're on HTTPS
+        maxAge: 1000 * 60 * 60 * 8 // 8 hours
+    }
+}));
 
 const pool = new Pool({
   database: "table_reservation"
@@ -105,10 +124,10 @@ app.post("/reservations", async (req, res) => {
     
     res.json(newResult.rows); 
 });
- 
+
 // DELETE (delete)
 
-app.delete("/reservations/:id", async (req, res) => {
+app.delete("/reservations/:id", requireAuth, async (req, res) => {
     const selectedId = Number(req.params.id); //grabs the id from url
     const result = await pool.query(
         "DELETE FROM reservations WHERE id = $1 RETURNING *", 
@@ -124,7 +143,7 @@ app.delete("/reservations/:id", async (req, res) => {
 
 // PUT (edit)
 
-app.put("/reservations/:id", async (req, res) => {
+app.put("/reservations/:id", requireAuth, async (req, res) => {
     const selectedId = Number(req.params.id);
     const { name, date, time, guests } = req.body;
 
@@ -178,6 +197,49 @@ app.put("/reservations/:id", async (req, res) => {
     res.json(newResult.rows); 
 });
 
+
+// LOGIN ROUTE
+
+app.post("/login", async (req, res) => {
+    const {email, password} = req.body;
+
+    const result = await pool.query(
+        "SELECT * FROM users WHERE email = $1", [email]
+    );
+    const user = result.rows[0];
+
+    if (!user) {
+        return res.status(401).json({ error: "Invalid credentials." });
+    };
+
+    const passwordMatches = await bcrypt.compare(password, user.password_hash);
+
+    if (!passwordMatches) {
+        return res.status(401).json({ error: "Invalid credentials." });
+    };
+
+    req.session.userId = user.id;
+    req.session.role = user.role;
+
+    res.json({success: true});
+});
+
+// LOGOUT ROUTE
+
+app.post("/logout", (req, res) => {
+    req.session.destroy(() =>{
+        res.json({session: true});
+    });
+});
+
+// AUTH MIDDLEWARE
+
+function requireAuth(req, res, next) {
+    if (!req.session.userId) {
+        return res.status(401).json({ error: "Not logged in." });
+    }
+    next(); // hands it on to delete or edit
+}; // this is like a is this person logged in? check
 
 
 const PORT = 3000;

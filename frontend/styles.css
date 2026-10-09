@@ -57,7 +57,6 @@ body {
     margin: 30px
 
 }
-
 #dev-form {
     border: 2px ridge var(--color-accent);
     padding: 20px;
@@ -473,4 +472,22 @@ body {
 #statistics-date-select:focus {
     border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76,175,80,0.4);
+}
+
+
+/* LOG IN PAGE */
+
+#login-title {
+    font-size: 30px;
+    margin: 30px 0;
+}
+
+#login-form {
+    border: 2px ridge var(--color-accent);
+    padding: 20px;
+    margin: 0px 30px;
+    font-size: 20px;
+    text-align: center;
+    line-height: 40px;
+    background-color: var(--color-secondary);
 }
