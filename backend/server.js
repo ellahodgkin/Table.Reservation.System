@@ -68,6 +68,15 @@ app.get("/reservations", async (req, res) => {
 });
 
 
+// GET (auth check)
+
+app.get("/auth-check", requireAuth, (req, res) => {
+    res.json({
+        loggedIn: true,
+        role: req.session.role
+    });
+});
+
 // POST (input)
 
 app.post("/reservations", async (req, res) => {

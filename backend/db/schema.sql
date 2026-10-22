@@ -20,6 +20,18 @@ CREATE TABLE reservations (
     table_id  INTEGER NOT NULL REFERENCES restaurant_tables(id)
 );
 
+-- don't drop users table as wiping the log ins after every tweaked schema would be annoying 
+-- create table if not exists creates it only if it's missing
+
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    role TEXT NOT NULL
+);
+
+
+
 -- Run SELECT * FROM restaurant_tables; in psql and copy the values across.
 INSERT INTO restaurant_tables (seat_capacity, shape, pos_top, pos_left) VALUES
     (6, 'rectangle', '5%',  '5%'),
