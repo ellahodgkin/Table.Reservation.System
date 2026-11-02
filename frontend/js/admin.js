@@ -138,12 +138,7 @@ form.addEventListener('submit', async function (e) {
             throw new Error(data.error || "Server Error");
         }
 
-        reservations = data; // on success data IS the updated reservations list
-        console.log(`reservations: ${reservations}`)
-        renderReservations();
-        renderTableLabels(reservations);
-        renderCalendarView(reservations, calendarDateSelect.value);
-        updateTimeOptions();
+        loadData();
 
         const formattedDate = new Date(date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
@@ -722,9 +717,8 @@ statisticsDateSelect.addEventListener('change', updateStatistics);
 
 // LOG OUT BUTTON 
 
- let logOut = document.getElementById('log-out-btn');
-
- logOut.addEventListener( 'click', async function (e) {
+let logOut = document.getElementById('log-out-btn');
+logOut.addEventListener('click', async function (e) {
     e.preventDefault();
 
     try {

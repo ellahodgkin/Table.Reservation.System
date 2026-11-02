@@ -56,11 +56,19 @@ app.get("/tables", async (req, res) => {
     res.json(result.rows);
 });
 
+// GET (public route)
+
+app.get("/reservations-public", async (req, res) => {
+    const result = await pool.query(
+        "SELECT reservations.date, reservations.time, reservations.table_id FROM reservations"
+    );
+    res.json(result.rows);
+});
 
 
 // GET (output)
 
-app.get("/reservations", async (req, res) => {
+app.get("/reservations", requireAuth, async (req, res) => {
     const result = await pool.query(
         "SELECT reservations.*, restaurant_tables.seat_capacity FROM reservations JOIN restaurant_tables ON reservations.table_id = restaurant_tables.id"
     );
@@ -127,11 +135,7 @@ app.post("/reservations", async (req, res) => {
         [name, date, time, guests, suitableTable.id]
     );
 
-    const newResult = await pool.query(
-        "SELECT reservations.*, restaurant_tables.seat_capacity FROM reservations JOIN restaurant_tables ON reservations.table_id = restaurant_tables.id"
-    );
-    
-    res.json(newResult.rows); 
+    res.json("Reservation created successfully.");
 });
 
 // DELETE (delete)
@@ -207,10 +211,14 @@ app.put("/reservations/:id", requireAuth, async (req, res) => {
 });
 
 
-// LOGIN ROUTE
+// LOGIN POST ROUTE
 
 app.post("/login", async (req, res) => {
     const {email, password} = req.body;
+
+    if (!email || !password || typeof(password) !== "string") {
+        return res.status(400).json({ error: "Email and password are required." });
+    };
 
     const result = await pool.query(
         "SELECT * FROM users WHERE email = $1", [email]
