@@ -8,6 +8,7 @@
 body {
     padding: 0;
     background-color: var(--color-primary);
+    font-family: "Menlo", monospace;
 }
 
 

@@ -34,9 +34,7 @@ function getAvailableTimeSlots(date, guests, reservations, tables) {
 
 
             const suitableTable = tables.find(table => {
-
                 const isFree = !bookedTableIds.includes(table.id);
-
                 const sizeFits = guests <= table.seat_capacity;
 
                 return isFree && sizeFits;

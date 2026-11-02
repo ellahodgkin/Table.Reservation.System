@@ -10,43 +10,68 @@ const dateSelect = document.getElementById("date");
 
 let tables = [];
 
-fetch("http://127.0.0.1:3000/tables")
-.then(response => {
-    if (!response.ok) {
-        throw new Error("Server Error")
-    }
-    return response.json()    
-})
-.then(data => {
-    tables = data;
-    console.log(tables);
-    renderTablePlan(tables);
-    renderCalendarRows(tables);
+checkAuth();
 
-    fetch("http://127.0.0.1:3000/reservations")
+async function checkAuth() {
+    try {
+        const response = await fetch(`http://127.0.0.1:3000/auth-check`, {
+            credentials: "include"
+        });
+        if (!response.ok) {
+            throw new Error("Server Error")
+        }
+        loadData();
+
+    } catch (error) {
+        console.log(error);
+        window.location.href = "login.html";
+    };
+};
+
+function loadData() {
+    fetch("http://127.0.0.1:3000/tables", {
+        credentials: "include"
+    })
     .then(response => {
         if (!response.ok) {
             throw new Error("Server Error")
         }
-        return response.json()
-        })
+        return response.json()    
+    })
     .then(data => {
-        reservations = data;
-        renderReservations();
-        renderTableLabels(reservations);
-        renderCalendarView(reservations, calendarDateSelect.value);
-        updateTimeOptions();
+        tables = data;
+        console.log(tables);
+        renderTablePlan(tables);
+        renderCalendarRows(tables);
 
+        fetch("http://127.0.0.1:3000/reservations", {
+            credentials: "include"
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Server Error")
+            }
+            return response.json()
+            })
+        .then(data => {
+            reservations = data;
+            renderReservations();
+            renderTableLabels(reservations);
+            renderCalendarView(reservations, calendarDateSelect.value);
+            updateTimeOptions();
+
+        })
+        .catch(error => {
+            console.log(error);
+            result.textContent = "Sorry, something went wrong. Please try again."
+        });
     })
     .catch(error => {
         console.log(error);
         result.textContent = "Sorry, something went wrong. Please try again."
     });
-})
-.catch(error => {
-    console.log(error);
-    result.textContent = "Sorry, something went wrong. Please try again."
-});
+};
+
 
 generateTimeSlots(timeSelect);
 generateGuestoptions(guestsSelect);
@@ -113,12 +138,7 @@ form.addEventListener('submit', async function (e) {
             throw new Error(data.error || "Server Error");
         }
 
-        reservations = data; // on success data IS the updated reservations list
-        console.log(`reservations: ${reservations}`)
-        renderReservations();
-        renderTableLabels(reservations);
-        renderCalendarView(reservations, calendarDateSelect.value);
-        updateTimeOptions();
+        loadData();
 
         const formattedDate = new Date(date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
@@ -214,8 +234,16 @@ function createDeleteButton(reservation) {
                 headers: {"Content-Type": "application/json"},
                 credentials: "include"
             });
+            if (response.status === 401) {
+                // response.status is the number the server sent back
+                // my requireAuth sends 401 when not logged in
+                window.location.href = "login.html";
+                return;
+                // doesn't carry on to lines below
+            }
             if (!response.ok) {
                 throw new Error("Server Error")
+                // anything else still falls to something went wrong
             }
             const updatedReservations = await response.json();
             reservations = updatedReservations;
@@ -341,6 +369,10 @@ async function updateReservation(reservation, nameInput, dateInput, timeInput, g
             body: JSON.stringify(reservation),
             credentials: "include"
         });
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
         if (!response.ok) {
             throw new Error("Server Error")
         }
@@ -685,9 +717,8 @@ statisticsDateSelect.addEventListener('change', updateStatistics);
 
 // LOG OUT BUTTON 
 
- let logOut = document.getElementById('log-out-btn');
-
- logOut.addEventListener( 'click', async function (e) {
+let logOut = document.getElementById('log-out-btn');
+logOut.addEventListener('click', async function (e) {
     e.preventDefault();
 
     try {

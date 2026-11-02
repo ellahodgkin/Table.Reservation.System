@@ -41,26 +41,33 @@ npm run dev
 
 The API runs at `http://localhost:3000`. You should see `My Table Reservation System - listening on port 3000!`.
 
-### 4. Open the app
+### 4. Set admin log in
 
-Open `frontend/customer.html` (customer booking page) or `frontend/admin.html` (admin dashboard) in your browser.
+Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in .env.
+Then run `node backend/seed-admin.js`
+
+### 5. Open the app
+
+Open `frontend/customer.html` (customer booking page) or `frontend/admin.html` (admin dashboard) in your browser. If not logged in admin dashboard will take you to the log in page.
 
 ## API
 
-| Method | Endpoint            | Description                      |
-|--------|---------------------|----------------------------------|
-| GET    | `/tables`           | List all tables                  |
-| GET    | `/reservations`     | List all reservations            |
-| POST   | `/reservations`     | Create a reservation             |
-| PUT    | `/reservations/:id` | Update a reservation             |
-| DELETE | `/reservations/:id` | Delete a reservation             |
+| Method | Endpoint                 | Description                           |
+|--------|--------------------------|---------------------------------------|
+| GET    | `/tables`                | List all tables                       |
+| GET    | `/reservations`          | List all reservations                 |
+| GET    | `/reservations-public`   | List date time and guests, not names  |
+| POST   | `/reservations`          | Create a reservation                  |
+| PUT    | `/reservations/:id`      | Update a reservation                  |
+| DELETE | `/reservations/:id`      | Delete a reservation                  |
 
 ## Roadmap
 
 - [ ] Authentication
 - [ ] Customer database (name, email, phone)
-- [ ] Manually move a booking to a different table
-- [ ] Admin overrides
+- [ ] Optional register account for customers
+- [ ] Admin overrides e.g manually move a booking to a different table
+- [ ] Different roles allocated by admin
 
 ## Author
 

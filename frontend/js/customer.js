@@ -10,36 +10,41 @@ const timeSelect = document.getElementById("time");
 const guestsSelect = document.getElementById("guests");
 const dateSelect = document.getElementById("date");
 
-fetch("http://127.0.0.1:3000/tables")
-.then(response => {
-    if (!response.ok) {
-        throw new Error("Server Error")
-    }
-    return response.json()    
-})
-.then(data => {
-    tables = data;
-
-    fetch("http://127.0.0.1:3000/reservations")
+function loadData() {
+    fetch("http://127.0.0.1:3000/tables")
     .then(response => {
         if (!response.ok) {
             throw new Error("Server Error")
         }
-        return response.json()
-        })
+        return response.json()    
+    })
     .then(data => {
-        reservations = data;
+        tables = data;
 
+        fetch("http://127.0.0.1:3000/reservations-public")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Server Error")
+            }
+            return response.json()
+            })
+        .then(data => {
+            reservations = data;
+            updateTimeOptions();
+
+        })
+        .catch(error => {
+            console.log(error);
+            result.textContent = "Sorry, something went wrong. Please try again."
+        });
     })
     .catch(error => {
         console.log(error);
         result.textContent = "Sorry, something went wrong. Please try again."
     });
-})
-.catch(error => {
-    console.log(error);
-    result.textContent = "Sorry, something went wrong. Please try again."
-});
+};
+
+loadData();
 
 generateTimeSlots(timeSelect);
 generateGuestoptions(guestsSelect);
@@ -107,9 +112,7 @@ form.addEventListener('submit', async function (e) {
             throw new Error(data.error || "Server Error");
         }
 
-        reservations = data; // on success data IS the updated reservations list
-        console.log(`reservations: ${reservations}`)
-        updateTimeOptions();
+        loadData();
 
         const formattedDate = new Date(date);
         const dateString = formattedDate.toLocaleDateString("en-GB");
