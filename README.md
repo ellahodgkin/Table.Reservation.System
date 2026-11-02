@@ -52,13 +52,14 @@ Open `frontend/customer.html` (customer booking page) or `frontend/admin.html` (
 
 ## API
 
-| Method | Endpoint            | Description                      |
-|--------|---------------------|----------------------------------|
-| GET    | `/tables`           | List all tables                  |
-| GET    | `/reservations`     | List all reservations            |
-| POST   | `/reservations`     | Create a reservation             |
-| PUT    | `/reservations/:id` | Update a reservation             |
-| DELETE | `/reservations/:id` | Delete a reservation             |
+| Method | Endpoint                 | Description                           |
+|--------|--------------------------|---------------------------------------|
+| GET    | `/tables`                | List all tables                       |
+| GET    | `/reservations`          | List all reservations                 |
+| GET    | `/reservations-public`   | List date time and guests, not names  |
+| POST   | `/reservations`          | Create a reservation                  |
+| PUT    | `/reservations/:id`      | Update a reservation                  |
+| DELETE | `/reservations/:id`      | Delete a reservation                  |
 
 ## Roadmap
 
