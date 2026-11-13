@@ -1,5 +1,5 @@
 :root {
-    --color-primary: rgb(224, 212, 190);
+    --color-primary: rgb(223, 207, 179);
     --color-secondary: rgb(244, 238, 227);
     --color-accent: rgb(178, 60, 47);
     --color-text:rgb(30, 27, 24);
@@ -7,8 +7,9 @@
 
 body {
     padding: 0;
+    background-image: linear-gradient(to bottom, var(--color-primary), rgb(227, 221, 211));
     background-color: var(--color-primary);
-    font-family: "Menlo", monospace;
+    font-family: "sans-serif", sans-serif;
 }
 
 
