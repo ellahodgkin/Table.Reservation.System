@@ -14,49 +14,76 @@
             <a href="login.html" id="log-out-btn" class="nav-link"> Log Out </a>
         </div>
     </div>
-    <div > 
-        <h3 id="title"> Table Reservation System: </h3>
 
-        <form id="dev-form">
+    <div class="admin-top-layout">
 
-            <label for="name"> Name: </label>
-            <input id="name" class="data-input-initial" name="name" type="text"> <br />
+        <!-- LEFT COLUMN -->
+        <div class="admin-left-column">
 
+            <div>
+                <h3 id="title">Table Reservation System</h3>
 
-            <label for="date"> Date: </label>
-            <input id="date" class="data-input-initial" type="date"> <br />
+                <form id="dev-form" class="display-cards">
 
-            <label for="time"> Time: </label>
-            <select id="time" class="data-input-initial" ></select> <br />
+                    <label for="name">Name:</label>
+                    <input id="name" class="data-input-initial" name="name" type="text">
+                    <br>
 
-            <label for="guests"> Guests: </label>
-            <select id="guests" class="data-input-initial" ></select> <br />
+                    <label for="date">Date:</label>
+                    <input id="date" class="data-input-initial" type="date">
+                    <br>
 
-            <input id="submit" class="submit-btn" type="submit" value="Submit"> 
-        </form>
-    </div>
+                    <label for="time">Time:</label>
+                    <select id="time" class="data-input-initial"></select>
+                    <br>
 
-    <div id="result"></div>
-    
-    <div id="current-reservation-presentation">
-        <h5 id="reservation-list-title"> Current Reservations: </h5>
+                    <label for="guests">Guests:</label>
+                    <select id="guests" class="data-input-initial"></select>
+                    <br>
 
-        <div id="reservations-list"></div>
+                    <input id="submit" class="submit-btn buttons" type="submit" value="Submit">
+
+                    <div id="result"></div>
+
+                </form>
+
+                
+            </div>
+
+            
+
+            <!-- Potential space for future admin features -->
+            <div id="admin-overview" class="display-cards">
+                <h5>Admin Overview</h5>
+                <p>Today's overview</p>
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div id="current-reservation-presentation" class="display-cards">
+
+            <h5 id="reservation-list-title">Current Reservations:</h5>
+
+            <div id="reservations-list"></div>
+
+        </div>
+
     </div>
 
     <div id="display-buttons-container">
-        <button id="show-calendar-btn"> Show Calendar </button>
-        <button id="show-tables-btn"> Show Tables </button>
+        <button id="show-calendar-btn" class="buttons"> Show Calendar </button>
+        <button id="show-tables-btn" class="buttons"> Show Tables </button>
     </div>
 
-    <div id="tables-presentation"> 
-        <h5 id="list-title"> Practice Reservations: </h5>
+    <div id="tables-presentation" class="display-cards">
+        <h5 id="list-title"> Reservations By Table: </h5>
         <div id="tables-floor">
 
         </div>
     </div>
 
-    <div id="calendar-view">
+    <div id="calendar-view" class="display-cards">
         <h5 id="calendar-title">Calendar View:</h5>
 
         <div id="calendar-date-select-container">
@@ -91,7 +118,7 @@
         </div>
     </div>
 
-    <div id="statistics-presentation"> 
+    <div id="statistics-presentation" class="display-cards"> 
         <h5 id="statistics-title"> Reservations Statistics: </h5>
 
         <div id="statistics-date-select-container">
@@ -102,10 +129,10 @@
         </div>
 
         <div id="statistics-mode-buttons">
-            <button class="stats-mode-btn" data-mode="day">Day</button>
-            <button class="stats-mode-btn" data-mode="week">Week</button>
-            <button class="stats-mode-btn" data-mode="month">Month</button>
-            <button class="stats-mode-btn" data-mode="all">All</button>
+            <button class="stats-mode-btn buttons" data-mode="day">Day</button>
+            <button class="stats-mode-btn buttons" data-mode="week">Week</button>
+            <button class="stats-mode-btn buttons" data-mode="month">Month</button>
+            <button class="stats-mode-btn buttons" data-mode="all">All</button>
         </div>
 
         <div id="statistics-container">

@@ -224,7 +224,7 @@ function createDeleteButton(reservation) {
 
     const deleteButton = document.createElement('button');
     deleteButton.textContent = "Delete";
-    deleteButton.classList.add("delete-btn", "edit-btns");
+    deleteButton.classList.add("delete-btn", "edit-btns", "buttons");
 
 
     deleteButton.addEventListener('click', async function() {
@@ -269,7 +269,7 @@ function createEditButton(reservation, item) {
 
     const editButton = document.createElement('button');
     editButton.textContent = "Edit";
-    editButton.classList.add("edit-btn", "edit-btns");
+    editButton.classList.add("edit-btn", "edit-btns", "buttons");
 
     editButton.addEventListener("click", function() {
         createEditForm(reservation, item);
@@ -324,11 +324,11 @@ function createEditForm(reservation, item) {
 
 
     const saveButton = document.createElement('button');
-    saveButton.classList.add("save-btn", "edit-btns")
+    saveButton.classList.add("save-btn", "edit-btns", "buttons")
     saveButton.textContent = "Save";
 
     const cancelButton = document.createElement('button');
-    cancelButton.classList.add("cancel-btn", "edit-btns");
+    cancelButton.classList.add("cancel-btn", "edit-btns", "buttons");
     cancelButton.textContent = "Cancel";
 
     item.innerHTML = "";
