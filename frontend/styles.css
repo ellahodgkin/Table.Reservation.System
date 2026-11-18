@@ -9,6 +9,10 @@
     --color-inputs: white;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 html {
     min-height: 100%;
 }
@@ -370,7 +374,6 @@ specified width and height, rather than adding them on afterwards*/
 }
 
 #calendar {
-    /* padding: 12px; */
     background-color: rgb(248, 247, 247);
     border: 2px ridge var(--color-bold);
     box-shadow: 0 0 5px rgba(175, 236, 177, 0.4);
@@ -401,7 +404,7 @@ specified width and height, rather than adding them on afterwards*/
 
 .calendar-row:first-child .calendar-row-label,
 .calendar-row:first-child .calendar-header-time-slot {
-    font-weight: 525;
+    font-weight: 600;
 }
 
 .calendar-row-label {
@@ -416,7 +419,6 @@ specified width and height, rather than adding them on afterwards*/
     background-color: var(--color-card);
     border-radius: 4px;
     border-right: none;
-    margin: 1px 2px;
     font-weight: 500;
 }
 
@@ -430,10 +432,11 @@ specified width and height, rather than adding them on afterwards*/
 }
 
 .calendar-header-time-slot {
-    border-right: 1px solid #ccc;
+    border-right: 0.5px solid #ccc;
+    border-left: 0.5px solid #ccc;
     border-top: none;
     text-align: center;
-    font-size: 0.8em;
+    font-size: 0.5em;
     padding: 0px 5px;
     display: flex;
     align-items: center;
@@ -451,7 +454,7 @@ specified width and height, rather than adding them on afterwards*/
     color: white;
     border-radius: 6px;
     padding: 4px 6px;
-    font-size: 0.8em;
+    font-size: 0.6em;
     display: flex;
     align-items: center;
     overflow: hidden;

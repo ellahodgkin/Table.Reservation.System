@@ -598,7 +598,7 @@ function createCalendarItem(reservation) {
     const booking = document.createElement('div');
     booking.classList.add('calendar-booking');
 
-    booking.textContent = `${reservation.name}-${reservation.time.slice(0, 5)}-${reservation.guests} guests`;
+    booking.textContent = `${reservation.name}-${reservation.guests} guests`;
 
     const [columnSlotStart, columnSlotEnd] = timeToColumn(reservation.time);
     booking.style.gridColumn = `${columnSlotStart} / ${columnSlotEnd}`;
@@ -622,6 +622,7 @@ function renderCurrentTimeLine() {
     const totalColumns = document.querySelectorAll('.calendar-header-time-slot').length;
     const totalMinutes = totalColumns * 30;
     const fraction = (nowMinutes - baseline) / totalMinutes;
+    // how far through the open hours we are, as a fraction of total open hours
 
     if (fraction < 0 || fraction > 1) return; // outside open hours
 
@@ -629,11 +630,14 @@ function renderCurrentTimeLine() {
     line.classList.add('current-time-line');
     line.setAttribute('id', 'current-time-line');
     line.style.left = `calc(100px + (100% - 100px) * ${fraction})`;
+    // 100% - 125px is the width of the grid (the whole calendar minus the label column)
+    // multiply by the fraction to get the position
+    // add 125px to account for the label column
 
     calendarParent.appendChild(line);
 };
 
-setInterval(renderCurrentTimeLine, 600000); // keeps it live, updates every minute
+setInterval(renderCurrentTimeLine, 60000); // keeps it live, updates every minute
 
 // STATISTICS DISPLAY 
 
